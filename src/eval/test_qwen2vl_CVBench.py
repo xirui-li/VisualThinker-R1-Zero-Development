@@ -101,7 +101,7 @@ if __name__ == "__main__":
         model.eval()
         # default processer
         processor = AutoProcessor.from_pretrained(MODEL_PATH)
-        # processor.tokenizer.padding_side = 'left'
+        processor.tokenizer.padding_side = 'left'
 
         desc_messages = []
         resp_messages = []
