@@ -101,25 +101,11 @@ if __name__ == "__main__":
         model.eval()
         # default processer
         processor = AutoProcessor.from_pretrained(MODEL_PATH)
-        processor.tokenizer.padding_side = 'left'
+        # processor.tokenizer.padding_side = 'left'
 
-        desc_messages = []
         resp_messages = []
 
         for i, example in tqdm(enumerate(cv_bench)):
-            desc_message = [
-                {
-                    "role": "user",
-                    "content": [
-                        {
-                            "type": "image",
-                            "image": example['image'],
-                        },
-                        {"type": "text", "text": "Describe this image in detail."},
-                    ],
-                }
-            ]
-
             if args.use_reasoning_prompt:
                 resp_prompt = example['question'] + ' Select from the following choices.\n' + ', '.join(example['choices'][:-1]) + ", or " + example['choices'][-1] + "\nOutput the thinking process in <think> </think> and final answer in <answer> </answer> tags."
             else:
@@ -138,7 +124,6 @@ if __name__ == "__main__":
                 }
             ]
 
-            desc_messages.append(desc_message)
             resp_messages.append(resp_message)
 
 
@@ -151,7 +136,7 @@ if __name__ == "__main__":
             text = [processor.apply_chat_template(msg, tokenize=False, add_generation_prompt=True) for msg in batch_messages]
             
             image_inputs, video_inputs = process_vision_info(batch_messages)
-            
+
             inputs = processor(
                 text=text,
                 images=image_inputs,
@@ -173,15 +158,11 @@ if __name__ == "__main__":
             )
             return batch_output_text
 
-        for i in tqdm(range(0, len(desc_messages), BSZ)):
-            batch_messages = desc_messages[i:i + BSZ]
+        for i in tqdm(range(0, len(resp_messages), BSZ)):
             
-            batch_desc_output = generate_batch(desc_messages[i:i + BSZ])
             batch_resp_output = generate_batch(resp_messages[i:i + BSZ])
             
-            all_desc_outputs.extend(batch_desc_output)
             all_resp_outputs.extend(batch_resp_output)
-            print(f"Processed batch {i//BSZ + 1}/{(len(desc_messages) + BSZ - 1)//BSZ}")
 
     else:
         with open(PRECOMPUTED_RESULT, "r") as f:
@@ -189,7 +170,7 @@ if __name__ == "__main__":
         all_resp_outputs = [r['response'] for r in result]
         all_desc_outputs = [r['description'] for r in result]
 
-    for i, (input_example, model_desc_output, model_resp_output) in enumerate(zip(cv_bench, all_desc_outputs, all_resp_outputs)):
+    for i, (input_example, model_resp_output) in enumerate(zip(cv_bench, all_resp_outputs)):
         # Count correct answers
         ground_truth = input_example['answer']
         model_answer = extract_answer(model_resp_output)
@@ -231,7 +212,6 @@ if __name__ == "__main__":
             'ground_truth': ground_truth,
             'response': model_resp_output,
             "model_answer": short_response,
-            "description": model_desc_output,
             "correct": correct,
         }
         final_output.append(result)
