@@ -7,6 +7,12 @@ This is the under-development repo for tiny-multimodal-r1.
 ```bash
 bash setup.sh
 ```
+# Prepare Dataset
+
+```bash
+cd src/data/SAT
+bash prepare_dataset.sh
+```
 
 # Training
 
