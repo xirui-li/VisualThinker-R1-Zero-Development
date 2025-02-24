@@ -1,24 +1,21 @@
+import re
 import os
-import pandas as pd
-from transformers import Qwen2VLForConditionalGeneration, AutoTokenizer, AutoProcessor
-from qwen_vl_utils import process_vision_info
 import torch
 import json
+import argparse
+import pandas as pd
 from tqdm import tqdm
-import re
 from PIL import Image
 from math_verify import parse, verify, LatexExtractionConfig, ExprExtractionConfig, StringExtractionConfig
+from transformers import Qwen2VLForConditionalGeneration, AutoTokenizer, AutoProcessor
+from qwen_vl_utils import process_vision_info
 from datasets import load_dataset
-
-import argparse
-import os
 
 def parse_arguments():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--model_path', required=True, type=str)
-    # Base model: "Qwen/Qwen2-VL-2B-Instruct"
-    parser.add_argument('--bs', default=8, type=int) # reduce it if GPU OOM
-    parser.add_argument('--output_dir', default="./logs/Qwen2-VL-2B-Instruct-GRPO", type=str)
+    parser.add_argument('--model_path', required=True, type=str) # Base model: "Qwen/Qwen2-VL-2B-Instruct"
+    parser.add_argument('--bs', default=32, type=int) # Batch size: reduce it if GPU OOM
+    parser.add_argument('--output_dir', default="results", type=str)
     parser.add_argument("--precomputed_json", type=str)
     parser.add_argument("--use_reasoning_prompt", default=True, action=argparse.BooleanOptionalAction)
 
@@ -59,7 +56,18 @@ def extract_characters_regex(s, choices=['(A)', '(B)', '(C)', '(D)', '(E)', '(F)
                     return choice[1]
             return ''
         return matches[0]
-
+def load_images(messsages):
+    images = []
+    for message in messsages:
+        for item in message:
+            if item['type'] == 'image':
+                if type(item['image']) == str:
+                    image_path = item['image']
+                    image = Image.open(image_path)
+                    images.append(image)
+                else:
+                    images.append(item['image'])
+    return images
 if __name__ == "__main__":
     cv_bench = load_dataset("nyu-visionx/CV-Bench", split="test")
 
@@ -99,6 +107,10 @@ if __name__ == "__main__":
         )
 
         model.eval()
+        model = torch.nn.DataParallel(model)
+
+        model.module = torch.compile(model.module)
+
         # default processer
         processor = AutoProcessor.from_pretrained(MODEL_PATH)
         # processor.tokenizer.padding_side = 'left'
@@ -106,49 +118,45 @@ if __name__ == "__main__":
         resp_messages = []
 
         for i, example in tqdm(enumerate(cv_bench)):
+
+            question = example['prompt']
+
             if args.use_reasoning_prompt:
-                resp_prompt = example['question'] + ' Select from the following choices.\n' + ', '.join(example['choices'][:-1]) + ", or " + example['choices'][-1] + "\nOutput the thinking process in <think> </think> and final answer in <answer> </answer> tags."
+                res_prompt = f'A conversation between User and Assistant. The user asks a question about the image, and the Assistant solves it.\nUser: {question} \nAssistant: '
             else:
-                resp_prompt = example['question'] + ' Select from the following choices.\n' + ', '.join(example['choices'][:-1]) + ", or " + example['choices'][-1] + "\nPlease select the correct answer from the options above and answer with letter option.\n"
+                res_prompt = f'A conversation between User and Assistant. The user asks a question about the image, and the Assistant solves it. The assistant first thinks about the reasoning process in the mind and then provides the user with the answer.\nUser: {question} \nAssistant: Let me solve this step by step.\n<think>'
 
             resp_message = [
-                {
-                    "role": "user",
-                    "content": [
+
                         {
                             "type": "image",
                             "image": example['image'],
                         },
-                        {"type": "text", "text": resp_prompt},
-                    ],
-                }
-            ]
+                        {"type": "text", "text": "<image>" + res_prompt},
+                    ]
 
             resp_messages.append(resp_message)
 
-
-        all_desc_outputs = []  # List to store all answers
+        # List to store all answers
         all_resp_outputs = []
-        # Process data in batches
 
+        # Process data in batches
         def generate_batch(batch_messages):
+
             # Preparation for inference
             text = [processor.apply_chat_template(msg, tokenize=False, add_generation_prompt=True) for msg in batch_messages]
             
-            image_inputs, video_inputs = process_vision_info(batch_messages)
-
+            images = load_images(batch_messages)
             inputs = processor(
                 text=text,
-                images=image_inputs,
-                videos=video_inputs,
+                images=images,
                 padding=True,
                 return_tensors="pt",
             )
-            inputs = inputs.to("cuda")
-
-            # Inference: Generation of the output
+            inputs = inputs.to(model.module.device)
+            
             with torch.no_grad():
-                generated_ids = model.generate(**inputs, use_cache=True, max_new_tokens=1024, do_sample=False)
+                generated_ids = model.module.generate(**inputs, use_cache=True, max_new_tokens=1024, do_sample=False, temperature=1)
             
             generated_ids_trimmed = [
                 out_ids[len(in_ids):] for in_ids, out_ids in zip(inputs.input_ids, generated_ids)
@@ -159,12 +167,15 @@ if __name__ == "__main__":
             return batch_output_text
 
         for i in tqdm(range(0, len(resp_messages), BSZ)):
+            batch_messages = resp_messages[i:i + BSZ]
             
             batch_resp_output = generate_batch(resp_messages[i:i + BSZ])
             
             all_resp_outputs.extend(batch_resp_output)
+            print(f"Processed batch {i//BSZ + 1}/{(len(resp_messages) + BSZ - 1)//BSZ}")
 
     else:
+        
         with open(PRECOMPUTED_RESULT, "r") as f:
             result = json.load(f)['results'][:-1]
         all_resp_outputs = [r['response'] for r in result]
@@ -232,14 +243,11 @@ if __name__ == "__main__":
     if not os.path.exists(OUTPUT_DIR):
         os.makedirs(OUTPUT_DIR)
 
-    with open(os.path.join(OUTPUT_DIR, f"CVBench_result.json"), "w") as f:
+    model_name = MODEL_PATH.split('/')[-1]
+    reasoning_tag = "reasoning" if args.use_reasoning_prompt else "no_reasoning"
+    with open(os.path.join(OUTPUT_DIR, f"CVBench_result_{model_name}_{reasoning_tag}.json"), "w") as f:
         json.dump({
             'results': final_output,
             "accuracy": acc,
             "args": vars(args)
         }, f, indent=2)
-
-
-
-
-

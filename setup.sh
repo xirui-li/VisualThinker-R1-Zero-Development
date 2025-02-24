@@ -15,4 +15,6 @@ pip install transformers==4.49.0 # correct deepspeed support
 pip install duckdb
 pip install opencv-python
 pip install pandas
-
+pip install math_verify==0.5.2
+pip install datasets
+pip install accelerate

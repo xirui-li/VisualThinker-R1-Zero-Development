@@ -15,10 +15,9 @@ import os
 
 def parse_arguments():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--model_path', required=True, type=str)
-    # Base model: "Qwen/Qwen2-VL-2B-Instruct"
-    parser.add_argument('--bs', default=32, type=int) # reduce it if GPU OOM
-    parser.add_argument('--output_dir', default="./logs/Qwen2-VL-2B-base-GRPO", type=str)
+    parser.add_argument('--model_path', required=True, type=str) # Base model: "Qwen/Qwen2-VL-2B-Instruct"
+    parser.add_argument('--bs', default=8, type=int) # reduce it if GPU OOM
+    parser.add_argument('--output_dir', default="results", type=str)
     parser.add_argument("--precomputed_json", type=str)
     parser.add_argument("--use_reasoning_prompt", default=True, action=argparse.BooleanOptionalAction)
 
@@ -59,18 +58,7 @@ def extract_characters_regex(s, choices=['(A)', '(B)', '(C)', '(D)', '(E)', '(F)
                     return choice[1]
             return ''
         return matches[0]
-def load_images(messsages):
-    images = []
-    for message in messsages:
-        for item in message:
-            if item['type'] == 'image':
-                if type(item['image']) == str:
-                    image_path = item['image']
-                    image = Image.open(image_path)
-                    images.append(image)
-                else:
-                    images.append(item['image'])
-    return images
+
 if __name__ == "__main__":
     cv_bench = load_dataset("nyu-visionx/CV-Bench", split="test")
 
@@ -110,19 +98,19 @@ if __name__ == "__main__":
         )
 
         model.eval()
-        model = torch.nn.DataParallel(model)
-
-        model.module = torch.compile(model.module)
-
         # default processer
-        processor = AutoProcessor.from_pretrained("Qwen/Qwen2-VL-2B")
+        processor = AutoProcessor.from_pretrained(MODEL_PATH)
         # processor.tokenizer.padding_side = 'left'
 
-        desc_messages = []
         resp_messages = []
 
         for i, example in tqdm(enumerate(cv_bench)):
-            desc_message = [
+            if args.use_reasoning_prompt:
+                resp_prompt = example['question'] + ' Select from the following choices.\n' + ', '.join(example['choices'][:-1]) + ", or " + example['choices'][-1] + "\nOutput the thinking process in <think> </think> and final answer in <answer> </answer> tags."
+            else:
+                resp_prompt = example['question'] + ' Select from the following choices.\n' + ', '.join(example['choices'][:-1]) + ", or " + example['choices'][-1] + "\nPlease select the correct answer from the options above and answer with letter option.\n"
+
+            resp_message = [
                 {
                     "role": "user",
                     "content": [
@@ -130,32 +118,11 @@ if __name__ == "__main__":
                             "type": "image",
                             "image": example['image'],
                         },
-                        {"type": "text", "text": "Describe this image in detail."},
+                        {"type": "text", "text": resp_prompt},
                     ],
                 }
             ]
 
-            question = example['question'] + ' Select from the following choices.\n' + ', '.join(example['choices'][:-1]) + ", or " + example['choices'][-1]
-            if args.use_reasoning_prompt:
-                resp_prompt = question + "\nOutput the thinking process in <think> </think> and final answer in <answer> </answer> tags."
-            else:
-                resp_prompt = question + "\nPlease select the correct answer from the options above.\n"
-
-            prompt = f'A conversation between User and Assistant. The user asks a question about the image, and the Assistant solves it. The assistant first thinks about the reasoning process in the mind and then provides the user with the answer.\nUser: {question} \nAssistant: Let me solve this step by step.\n<think>'
-            # prompt = f"A conversation between User and Assistant. The user asks a question about the image, and the Assistant solves it. The assistant first thinks about the reasoning process in the mind and then provides the user with the answer. The reasoning process and answer are enclosed within <think> </think> and <answer> </answer> tags, respectively, i.e., <think> reasoning process here </think><answer> answer here </answer>.\nUser: {question} \nAssistant: Let me solve this step by step.<think>"
-
-            resp_message = [
-
-                        {
-                            "type": "image",
-                            "image": example['image'],
-                        },
-                        {"type": "text", "text": "<image>" + prompt},
-                    ]
-
-            # resp_message = "<image>" + prompt
-
-            desc_messages.append(desc_message)
             resp_messages.append(resp_message)
 
 
@@ -167,22 +134,20 @@ if __name__ == "__main__":
             # Preparation for inference
             text = [processor.apply_chat_template(msg, tokenize=False, add_generation_prompt=True) for msg in batch_messages]
             
-            images = load_images(batch_messages)
+            image_inputs, video_inputs = process_vision_info(batch_messages)
+
             inputs = processor(
                 text=text,
-                images=images,
+                images=image_inputs,
+                videos=video_inputs,
                 padding=True,
                 return_tensors="pt",
             )
             inputs = inputs.to("cuda")
-            
-            # print(f"input_ids: {inputs['input_ids'].device}")
-            # print(f"pixel_values: {inputs['pixel_values'].device}")
-            # print(f"attention_mask: {inputs['attention_mask'].device}")
-            # print(f"image_grid_thw: {inputs['image_grid_thw'].device}")
+
             # Inference: Generation of the output
             with torch.no_grad():
-                generated_ids = model.module.generate(**inputs, use_cache=True, max_new_tokens=1024, do_sample=False)
+                generated_ids = model.generate(**inputs, use_cache=True, max_new_tokens=1024, do_sample=False)
             
             generated_ids_trimmed = [
                 out_ids[len(in_ids):] for in_ids, out_ids in zip(inputs.input_ids, generated_ids)
@@ -192,15 +157,11 @@ if __name__ == "__main__":
             )
             return batch_output_text
 
-        for i in tqdm(range(0, len(desc_messages), BSZ)):
-            batch_messages = desc_messages[i:i + BSZ]
+        for i in tqdm(range(0, len(resp_messages), BSZ)):
             
-            # batch_desc_output = generate_batch(desc_messages[i:i + BSZ])
             batch_resp_output = generate_batch(resp_messages[i:i + BSZ])
             
-            # all_desc_outputs.extend(batch_desc_output)
             all_resp_outputs.extend(batch_resp_output)
-            print(f"Processed batch {i//BSZ + 1}/{(len(desc_messages) + BSZ - 1)//BSZ}")
 
     else:
         with open(PRECOMPUTED_RESULT, "r") as f:
@@ -250,7 +211,6 @@ if __name__ == "__main__":
             'ground_truth': ground_truth,
             'response': model_resp_output,
             "model_answer": short_response,
-            # "description": model_desc_output,
             "correct": correct,
         }
         final_output.append(result)
@@ -277,3 +237,8 @@ if __name__ == "__main__":
             "accuracy": acc,
             "args": vars(args)
         }, f, indent=2)
+
+
+
+
+
