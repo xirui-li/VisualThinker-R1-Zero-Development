@@ -1,0 +1,7 @@
+*.log
+*.tmp
+*.csv
+*.json
+*.parquet
+*.png
+*.jpg
