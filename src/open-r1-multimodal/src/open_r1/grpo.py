@@ -21,7 +21,7 @@ import cv2
 import numpy as np
 
 from datasets import load_dataset, load_from_disk, concatenate_datasets
-from transformers import Qwen2VLForConditionalGeneration
+from transformers import Qwen2VLForConditionalGeneration, AutoProcessor
 
 from math_verify import parse, verify
 from open_r1.trainer import Qwen2VLGRPOTrainer
@@ -63,7 +63,6 @@ def accuracy_reward(completions, solution, **kwargs):
         contents = [completion for completion in completions]
     else:
         contents = [completion[0]["content"] for completion in completions]
-    import pdb; pdb.set_trace()
     rewards = []
     current_time = datetime.now().strftime("%d-%H-%M-%S-%f")
     for content, sol in zip(contents, solution):
@@ -103,12 +102,10 @@ def accuracy_reward(completions, solution, **kwargs):
                 f.write(f"------------- {current_time} Accuracy reward: {reward} -------------\n")
                 f.write(f"Content: {content}\n")
                 f.write(f"Solution: {sol}\n")
-    # import pdb; pdb.set_trace()
     return rewards
 
-from transformers import AutoProcessor
-processor = AutoProcessor.from_pretrained("Qwen/Qwen2-VL-2B-Instruct")
 def length_reward(completions, **kwargs):
+    processor = AutoProcessor.from_pretrained("Qwen/Qwen2-VL-2B-Instruct")
     rewards = []
     for completion in completions:
         rewards.append(len(processor.tokenizer(completion[0]["content"])['input_ids']) * 0.001)
@@ -194,6 +191,7 @@ def generate_matrix(array_list, return_subfigure=False):
         return subfigures
     else:
         return img_grid
+
 def generate_answers(array_list, return_subfigure=False):
     assert len(array_list) <= 8
     img_grid = np.zeros(((IMAGE_SIZE+BORDER) * 2, (IMAGE_SIZE+BORDER) * 4), np.uint8)
@@ -389,7 +387,7 @@ def main(script_args, training_args, model_args):
             if "paligemma" in model_args.model_name_or_path.lower():
                 prompt = f'A conversation between User and Assistant. The user asks a question about the image, and the Assistant solves it. The assistant first thinks about the reasoning process in the mind and then provides the user with the answer. The reasoning process and answer are enclosed within <think> </think> and <answer> </answer> tags, respectively, i.e., <think> reasoning process here </think><answer> answer here </answer>.\n User:{question}'
                 return {"image": image,
-                        "prompt": "<image>" + prompt + "Assistant: Let me solve this step by step. \n <think>",
+                        "prompt": "<image>" + prompt + "Assistant: Let me solve this step by step. \n<think>",
                     "solution":  "<answer>" + example["messages"][1]["content"] + "</answer>", 
                 }
             else:
@@ -398,7 +396,7 @@ def main(script_args, training_args, model_args):
                     question = example["messages"][0]["content"]
                     question = question.replace("<image>", "")
                     prompt = f'A conversation between User and Assistant. The user asks a question about the image, and the Assistant solves it. The assistant first thinks about the reasoning process in the mind and then provides the user with the answer.\nUser: {question} \nAssistant: Let me solve this step by step.\n<think>'
-                    # prompt = f'A conversation between User and Assistant. The user asks a question about the image, and the Assistant solves it. The assistant first thinks about the reasoning process in the mind and then provides the user with the answer. The reasoning process and answer are enclosed within <think> </think> and <answer> </answer> tags, respectively, i.e., <think> reasoning process here </think><answer> answer here </answer>.\nUser: {question} \nAssistant: Let me solve this step by step.<think>'
+ 
                     return {"image": image,
                         "prompt": [
                                     {"type": "image"},
@@ -420,23 +418,17 @@ def main(script_args, training_args, model_args):
                         ],
                         "solution":  "<answer>" + example["messages"][1]["content"] + "</answer>", 
                     }
-        dataset_prefix = "../data/"
-        dataset_path = "SAT/SAT_train_15000.json"
+        dataset_prefix = "../data/SAT/"
+        dataset_path = "SAT_train_15000.json"
         
         import json
         # load json file 
         with open(dataset_prefix + dataset_path, 'r') as f:
             sat_dataset = json.load(f)
 
-        # relative_keywords = ["to the left", "to the right", "closer", "relative", "with respect to", "in front of", "3d positions", "behind"]
-        # count_samples = [sample for sample in sat_dataset if "how many" in sample['messages'][0]['content'].lower()]
-        # depth_samples = [sample for sample in sat_dataset if "camera" in sample['messages'][0]['content'].lower()]
-        # relative_samples = [sample for sample in sat_dataset if any(rel in sample['messages'][0]['content'].lower() for rel in relative_keywords) and sample not in depth_samples]
-
-        # sat_dataset = count_samples[:800] + depth_samples[:800] + relative_samples[:800]
         dataset = [make_conversation_sat(sample, base_model_prompt) for sample in sat_dataset]
-
         dataset = {'train': dataset}
+
     elif script_args.dataset_name == "LLaVA-OneVision":
         data_list = [
                      'CLEVR-Math(MathV360K)', 

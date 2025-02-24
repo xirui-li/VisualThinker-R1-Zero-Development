@@ -239,7 +239,7 @@ class Qwen2VLGRPOTrainer(Trainer):
                 if "Qwen2-VL" in model_id:
                     processing_class.image_processor.max_pixels = max_pixels
                     processing_class.image_processor.min_pixels = min_pixels
-            if "InternVL2" in model_id:
+            elif "InternVL2" in model_id:
                 processing_class = AutoTokenizer.from_pretrained(model.config._name_or_path, trust_remote_code=True, padding_side="left")
                 pad_token_id = processing_class.pad_token_id
             else:
@@ -396,7 +396,6 @@ class Qwen2VLGRPOTrainer(Trainer):
         # Generate completions
         with unwrap_model_for_generation(model, self.accelerator) as unwrapped_model:
             #prompt_completion_ids = unwrapped_model.generate(**prompt_inputs, generation_config=self.generation_config)
-            import pdb; pdb.set_trace()
             # Generate N times, each generate one with the temp_generation_config , stack the output_ids to prompt_completion_ids, pad the empty places with number 151613
             num_generations = self.generation_config.num_return_sequences
             temp_generation_config = copy.deepcopy(self.generation_config)
