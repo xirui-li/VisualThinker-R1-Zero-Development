@@ -1,8 +1,8 @@
 export CUDA_VISIBLE_DEVICES=0,1,2,3
 
 accelerate launch --config_file=configs/zero3.yaml src/open_r1/sft.py \
-    --model_name_or_path <PATH-TO-Qwen2-VL-2B-Instruct> \
-    --dataset_name <DATASET_NAME> \
+    --model_name_or_path Qwen/Qwen2-VL-2B \
+    --dataset_name SAT \
     --learning_rate 2.0e-5 \
     --num_train_epochs 2 \
     --packing True \
@@ -15,5 +15,5 @@ accelerate launch --config_file=configs/zero3.yaml src/open_r1/sft.py \
     --bf16 True \
     --logging_steps 5 \
     --eval_strategy no \
-    --output_dir <OUTPUT_DIR> \
-    --run_name <RUN_NAME>
+    --output_dir outputs/Qwen2_VL-2B-SFT \
+    --run_name Qwen2_VL-2B-SFT-SAT
