@@ -5,3 +5,12 @@
 *.parquet
 *.png
 *.jpg
+
+# dependency directories
+/Multimodal-R1/src/open-r1-multimodal/src/open_r1/__pycache__/*
+
+# Python cache
+__pycache__/
+
+# Egg info
+*.egg-info/
