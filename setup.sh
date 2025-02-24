@@ -12,4 +12,5 @@ pip install qwen_vl_utils torchvision
 pip install flash-attn --no-build-isolation
 
 pip install git+https://github.com/huggingface/transformers.git # correct deepspeed support
+pip install duckdb
 
