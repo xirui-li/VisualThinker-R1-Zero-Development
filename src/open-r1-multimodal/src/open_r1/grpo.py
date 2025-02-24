@@ -420,7 +420,7 @@ def main(script_args, training_args, model_args):
                         ],
                         "solution":  "<answer>" + example["messages"][1]["content"] + "</answer>", 
                     }
-        dataset_prefix = "Multimodal-R1/src/data/"
+        dataset_prefix = "../data/"
         dataset_path = "SAT/SAT_train_15000.json"
         
         import json
@@ -471,6 +471,8 @@ def main(script_args, training_args, model_args):
         for i in range(len(dataset_list)):
             dataset_list[i] = dataset_list[i].shuffle(seed=42).select(range(int(data_len[i]*ratio)))
             dataset += [make_conversation_image(sample) for sample in dataset_list[i]]
+        
+        dataset = {'train': dataset}
     else:
         # Load the dataset
         dataset = load_dataset(script_args.dataset_name, name=script_args.dataset_config)
@@ -514,7 +516,7 @@ def main(script_args, training_args, model_args):
         model=model_args.model_name_or_path,
         reward_funcs=reward_funcs,
         args=training_args,
-        train_dataset=dataset if script_args.dataset_name == "LLaVA-OneVision" else dataset[script_args.dataset_train_split],
+        train_dataset=dataset[script_args.dataset_train_split],
         eval_dataset=dataset[script_args.dataset_test_split] if training_args.eval_strategy != "no" else None,
         peft_config=get_peft_config(model_args),
         attn_implementation=model_args.attn_implementation,
