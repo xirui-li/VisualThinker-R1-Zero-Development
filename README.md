@@ -2,12 +2,18 @@
 
 # [Place Holder]
 
-[![Notion](https://img.shields.io/badge/Notion-%23000000.svg?style=for-the-badge&logo=notion&logoColor=white)](https://hkust-nlp.notion.site/simplerl-reason) [![Hugging Face](https://img.shields.io/badge/SimpleRL-fcd022?style=for-the-badge&logo=Huggingface&logoColor=000)](https://huggingface.co/collections/hkust-nlp/simplerl-67b543892b2ec6908ffff710)
+[![Notion](https://img.shields.io/badge/Notion-%23000000.svg?style=for-the-badge&logo=notion&logoColor=white)](https://hkust-nlp.notion.site/simplerl-reason)
 
 </div>
 
 
-This repo contains a simple reinforcement learning recipe to improve models' reasoning abilities. It is simple because only rule-based reward is used, the recipe is almost the same as the one used in [DeepSeek-R1](https://github.com/deepseek-ai/DeepSeek-R1), except that the code currently uses PPO rather than GRPO. We have used this code to train small models (7B) on limited data (8K examples), achieving surprisingly strong results -- for example, starting from Qwen2.5-Math-7B (base model), we perform RL on it directly. No SFT, no reward model, just 8K MATH examples for verification, the resultant model achieves (pass@1) 33.3% on AIME, 62.5% on AMC, and 77.2% on MATH, outperforming Qwen2.5-math-7B-instruct and being comparable to previous baselines that use >50x more data and more complicated components. You may check our Notion blog or the Introduction below for more details.  
+[PLACE HOLDER] is a reproduction of DeepSeek R1 Zero in vision centric tasks. We built upon Open-R1-Multimodal and R1-V.
+
+Through applying GRPO on the 2B base LM develops self-verification autonomously and exhibits an emergent ability to "take another look" at the image and correct its mistakes.
+
+1. We are the **first to replicate a key characteristic** of R1 success (**”aha moment”** and **increasing reasoning length**) on **multimodal** reasoning tasks.
+
+2. We showed that **vision-centric** tasks could also benefit from improved reasoning capabilities.  
 
 <div align="center">
 <img src="https://github.com/user-attachments/assets/bacd1680-ccb0-4921-a687-8a595ebf5896" width="700" alt="simplelr-reaoning-intro-figure_00">
@@ -20,18 +26,6 @@ This repo contains a simple reinforcement learning recipe to improve models' rea
 ![Vision-Centric](https://img.shields.io/badge/Task-Vision--Perception-yellow) 
 ![Qwen-VL](https://img.shields.io/badge/Model-Qwen--VL-green)
 ![Aha-Moment](https://img.shields.io/badge/Analysis-Aha--moment-green) 
-
-[PLACE HOLDER] is a reproduction of DeepSeek R1 Zero in vision centric tasks. We built upon Open-R1-Multimodal and R1-V.
-
-Through applying GRPO on the 2B base LM develops self-verification autonomously and exhibits an emergent ability to "take another look" at the image and correct its mistakes.
-
-**TL;DR:**
-1. We are the **first to replicate a key characteristic** of R1 success (**”aha moment”** and **increasing reasoning length**) on **multimodal** reasoning tasks.
-
-2. We showed that **vision-centric** tasks could also benefit from improved reasoning capabilities.
-
-   
-Paper's on it's way, stay tuned!
 
 **Twitter thread: ** [PLACE HOLDER]
 
