@@ -8,7 +8,7 @@
 ![R1](https://img.shields.io/badge/Algo-R1-red) 
 ![Vision-Centric](https://img.shields.io/badge/Task-Vision--Centric-yellow) 
 ![Qwen-VL](https://img.shields.io/badge/Model-Qwen--VL-green)
-![Aha-Moment](https://img.shields.io/badge/Analysis-Aha--moment-green) 
+![Aha-Moment](https://img.shields.io/badge/Analysis-Aha--moment-blue) 
 
 </div>
 
