@@ -43,12 +43,12 @@ python test_qwen2vl_CVBench.py
 > 2. If you meet **OOM Error**, add `--deepspeed local_scripts/zero3.json` following https://github.com/Deep-Agent/R1-V/issues/18 or you can reduce `--num_generations`
 
 
-# :coffee: Stay Connected!
+## :coffee: Stay Connected!
 
 We are always open to engaging discussions, collaborations, or even just sharing a virtual coffee. To get in touch or join our team, visit [TurningPoint AI](https://www.turningpoint-ai.com/)'s homepage for contact information.
 
 
-# :white_check_mark: Cite
+## :white_check_mark: Cite
 
 If you find our research useful for your your research and applications, please kindly cite using this BibTeX: *placeholder*
 
