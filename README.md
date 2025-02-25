@@ -23,16 +23,12 @@ Through applying GRPO on the 2B base LM develops self-verification autonomously 
 
 Similar to DeepSeek R1, self reflection behavior is also observed during our RL training on vision-centric reasoning tasks: the model exhibits an emergent ability to rethink and correct its mistakes.:
 
-```bash
+```
 . . .
-
 Therefore, dark brown wooden bed with white blanket is not above the doorway.
-
 **But wait! I can think of something else.**
-
 Maybe it's just higher than above the doorway, but slightly lower than above the doorway.
 . . .
-
 ```
 
 ![Reinforcement Learning](https://img.shields.io/badge/Algo-Reinforcement--Learning-red) 
