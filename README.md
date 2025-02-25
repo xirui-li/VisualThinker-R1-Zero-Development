@@ -21,6 +21,20 @@ Through applying GRPO on the 2B base LM develops self-verification autonomously 
 
 > Training dynamics of our [Place Holder] training starting from the Qwen-VL-2B, without SFT or reward models. An aha moment and increasing response length is ever observed at a multimodal model.
 
+Similar to DeepSeek R1, self reflection behavior is also observed during our RL training on vision-centric reasoning tasks: the model exhibits an emergent ability to rethink and correct its mistakes.:
+
+```bash
+. . .
+
+Therefore, dark brown wooden bed with white blanket is not above the doorway.
+
+**But wait! I can think of something else.**
+
+Maybe it's just higher than above the doorway, but slightly lower than above the doorway.
+. . .
+
+```
+
 ![Reinforcement Learning](https://img.shields.io/badge/Algo-Reinforcement--Learning-red) 
 ![R1](https://img.shields.io/badge/Algo-R1-red) 
 ![Vision-Centric](https://img.shields.io/badge/Task-Vision--Perception-yellow) 
