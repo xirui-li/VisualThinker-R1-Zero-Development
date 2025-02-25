@@ -120,7 +120,7 @@ We sincerely thank [DeepSeek](https://github.com/deepseek-ai/DeepSeek-R1), [Open
 
 ## :white_check_mark: Cite
 
-If you find our research useful for your your research and applications, please kindly cite using this BibTeX: *placeholder*
+If you find our research useful for your your research and applications, please kindly cite using this BibTeX:
 
 ```latex
 @misc{li2024mossbenchmultimodallanguagemodel,
