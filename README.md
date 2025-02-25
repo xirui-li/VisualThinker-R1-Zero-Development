@@ -26,7 +26,7 @@ Similar to DeepSeek R1, self reflection behavior is also observed during our RL 
 ```
 . . .
 Therefore, dark brown wooden bed with white blanket is not above the doorway.
-**But wait! I can think of something else.**
+But wait! I can think of something else.
 Maybe it's just higher than above the doorway, but slightly lower than above the doorway.
 . . .
 ```
