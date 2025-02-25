@@ -16,7 +16,7 @@ Through applying GRPO on the 2B base LM develops self-verification autonomously 
 2. We showed that **vision-centric** tasks could also benefit from improved reasoning capabilities.  
 
 <div align="center">
-<img src="https://github.com/user-attachments/assets/bacd1680-ccb0-4921-a687-8a595ebf5896" width="700" alt="simplelr-reaoning-intro-figure_00">
+<img src="https://multimodal-r1.s3.us-west-1.amazonaws.com/Training_Steps.png" width="700" alt="simplelr-reaoning-intro-figure_00">
 </div>
 
 > Training dynamics of our [Place Holder] training starting from the Qwen-VL-2B, without SFT or reward models.
