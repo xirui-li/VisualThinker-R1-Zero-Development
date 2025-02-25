@@ -6,6 +6,12 @@
 
 </div>
 
+<div align="center">
+<img src="https://multimodal-r1.s3.us-west-1.amazonaws.com/Training_Steps.png" width="700" alt="simplelr-reaoning-intro-figure_00">
+</div>
+
+> Training dynamics of our [Place Holder] training starting from the Qwen-VL-2B, without SFT or reward models. An aha moment and increasing response length is ever observed at a multimodal model.
+
 [DeepSeek R1](https://arxiv.org/abs/2501.12948) has demonstrated how Reinforcement Learning (RL) with well-designed rule-based rewards can enable a large language model to build unique reasoning capabilities autonomously. Since then, many researchers have attempted to extend this success to multimodal reasoning. However, recent efforts primarily **struggle to reproduce the increasing response length and thinking pattern** exhibited by DeepSeek R1. 
 
 [PLACE HOLDER] is a replication of DeepSeek-R1-Zero training on **small multimodal** models. We are **the first** to successfully observe **the emergent “aha moment”** and **increased response** length on **multimodal** tasks.
@@ -14,12 +20,6 @@ Through applying GRPO on the 2B base LM develops self-verification autonomously 
 1. We are the **first to replicate a key characteristic** of R1 success (**”aha moment”** and **increasing reasoning length**) on **multimodal** reasoning tasks.
 
 2. We showed that **vision-centric** tasks could also benefit from improved reasoning capabilities.  
-
-<div align="center">
-<img src="https://multimodal-r1.s3.us-west-1.amazonaws.com/Training_Steps.png" width="700" alt="simplelr-reaoning-intro-figure_00">
-</div>
-
-> Training dynamics of our [Place Holder] training starting from the Qwen-VL-2B, without SFT or reward models. An aha moment and increasing response length is ever observed at a multimodal model.
 
 Similar to DeepSeek R1, self reflection behavior is also observed during our RL training on vision-centric reasoning tasks: the model exhibits an emergent ability to rethink and correct its mistakes.:
 
