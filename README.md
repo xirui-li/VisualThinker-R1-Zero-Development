@@ -19,7 +19,7 @@ Through applying GRPO on the 2B base LM develops self-verification autonomously 
 <img src="https://multimodal-r1.s3.us-west-1.amazonaws.com/Training_Steps.png" width="700" alt="simplelr-reaoning-intro-figure_00">
 </div>
 
-> Training dynamics of our [Place Holder] training starting from the Qwen-VL-2B, without SFT or reward models.
+> Training dynamics of our [Place Holder] training starting from the Qwen-VL-2B, without SFT or reward models. A aha moment and increasing response length is ever observed at a multimodal model.
 
 ![Reinforcement Learning](https://img.shields.io/badge/Algo-Reinforcement--Learning-red) 
 ![R1](https://img.shields.io/badge/Algo-R1-red) 
