@@ -27,7 +27,7 @@ Through applying GRPO on the 2B base LM develops self-verification autonomously 
 ![Qwen-VL](https://img.shields.io/badge/Model-Qwen--VL-green)
 ![Aha-Moment](https://img.shields.io/badge/Analysis-Aha--moment-green) 
 
-**Twitter thread: ** [PLACE HOLDER]
+**Twitter thread:** [PLACE HOLDER]
 
 **Full experiment log:** [PLACE HOLDER]
 
