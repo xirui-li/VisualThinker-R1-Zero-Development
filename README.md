@@ -44,6 +44,7 @@ Maybe it's just higher than above the doorway, but slightly lower than above the
 **Blogs:** [PLACE HOLDER]
 
 ### Updates:
+- 2025-02-24: We share our repo at the [PLACE HOLDER] notion page.
 - 2025-02-24: We release the [PLACE HOLDER] repo.
 
 
