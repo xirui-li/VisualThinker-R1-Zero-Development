@@ -1,38 +1,44 @@
-# Multimodal-R1
+# [PLACE HOLDER]
 
-This is the under-development repo for tiny-multimodal-r1.
+![Reinforcement Learning](https://img.shields.io/badge/Algo-Reinforcement--Learning-red) 
+![R1](https://img.shields.io/badge/Algo-R1-red) 
+![Vision-Centric](https://img.shields.io/badge/Task-Vision--Perception-yellow) 
+![Qwen-VL](https://img.shields.io/badge/Model-Qwen--VL-green)
+![Aha-Moment](https://img.shields.io/badge/Analysis-Aha--moment-green) 
 
-# Setup
+This is the under-development repo for our [].
+
+## Setup
 
 ```bash
 bash setup.sh
 ```
-# Prepare Dataset
+## Prepare Dataset
 
 ```bash
 cd src/data/SAT
 bash prepare_dataset.sh
 ```
 
-# Training
+## Training
 
-## GRPO Training
+### GRPO Training
 To reproduce checkpoing on different dataset, replace the sh file in the following command with run_grpo_{dataset_name}.sh
 ```bash
 cd src/open-r1-multimodal
 sh run_grpo_SAT.sh # Adjust open-r1-multimodal/configs/zero3.yaml or zero2.yaml accordingly # Full training for 2 epochs take more than 50 hours, we usually can observe reward peak and stop at step 100~500
 ```
 
-## SFT Training
+### SFT Training
 
 ```bash
 cd src/open-r1-multimodal
 sh run_sft.sh # Adjust open-r1-multimodal/configs/zero3.yaml or zero2.yaml accordingly
 ```
 
-# Evaluation
+## Evaluation
 
-## CVBench Evaluation
+### CVBench Evaluation
 ```bash
 cd src/eval
 python test_qwen2vl_CVBench.py 
