@@ -1,8 +1,8 @@
 # [PLACE HOLDER]
 
-![Reinforcement Learning](https://img.shields.io/badge/Task-Reinforcement--Learning-red) 
-![R1](https://img.shields.io/badge/Task-R1-red) 
-![Vision-Centric](https://img.shields.io/badge/Task-Vision--Perception-red) 
+![Reinforcement Learning](https://img.shields.io/badge/Algo-Reinforcement--Learning-red) 
+![R1](https://img.shields.io/badge/Algo-R1-red) 
+![Vision-Centric](https://img.shields.io/badge/Task-Vision--Perception-yellow) 
 ![Qwen-VL](https://img.shields.io/badge/Model-Qwen--VL-green)
 ![Aha-Moment](https://img.shields.io/badge/Analysis-Aha--moment-green) 
 
