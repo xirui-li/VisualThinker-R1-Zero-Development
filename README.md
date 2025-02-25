@@ -52,7 +52,7 @@ bash prepare_dataset.sh
 ## Training
 
 ### GRPO Training
-To reproduce checkpoing on different dataset, replace the sh file in the following command with run_grpo_{dataset_name}.sh
+To reproduce the multimodal aha moment, run the following code:
 ```bash
 cd src/open-r1-multimodal
 sh run_grpo_SAT.sh # Adjust open-r1-multimodal/configs/zero3.yaml or zero2.yaml accordingly
