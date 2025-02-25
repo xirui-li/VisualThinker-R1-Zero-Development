@@ -1,6 +1,6 @@
 # [PLACE HOLDER]
 
-![Reinforcement Learning](https://img.shields.io/badge/Task-Reinforcement-Learning-red) 
+![Reinforcement Learning](https://img.shields.io/badge/Task-Reinforcement--Learning-red) 
 ![R1](https://img.shields.io/badge/Task-R1-red) 
 ![Vision-Centric](https://img.shields.io/badge/Task-Vision--Perception-red) 
 ![Qwen-VL](https://img.shields.io/badge/Model-Qwen--VL-green)
