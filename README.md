@@ -38,28 +38,6 @@ cd src/eval
 python test_qwen2vl_CVBench.py 
 ```
 
-## MMVP Evaluation
-```bash
-cd src/eval
-git clone https://huggingface.co/datasets/MMVP/MMVP
-python test_qwen2vl_MMVP.py
-```
-
-## SuperCLEVR Evaluation
-
-```bash
-cd src/eval
-wget https://www.cs.jhu.edu/~zhuowan/zhuowan/SuperCLEVR/to_be_released/images.zip
-unzip images.zip
-
-# change the model path in the script
-python test_qwen2vl_counting_superclevr.py 
-
-# tested scores: 
-# Qwen2VL-2B-Instruct: 86.5%
-# Qwen2VL-2B-Instruct-GRPO-100step: 83.5%
-```
-
 > [!NOTE] 
 > 1. To reproduce the result, keep the per_device_train_batch_size to 1 for now, as there is a revealed bug about batched training. See the [reproduction report](https://github.com/Deep-Agent/R1-V/issues/4#issuecomment-2633348354) here. We realize it is important for effiency and are working on solving it with the community.
 > 2. If you meet **OOM Error**, add `--deepspeed local_scripts/zero3.json` following https://github.com/Deep-Agent/R1-V/issues/18 or you can reduce `--num_generations`
