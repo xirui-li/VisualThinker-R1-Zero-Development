@@ -79,9 +79,34 @@ sh run_sft.sh # Adjust open-r1-multimodal/configs/zero3.yaml or zero2.yaml accor
 ## Evaluation
 
 ### CVBench Evaluation
+First change to evaluation directory:
 ```bash
-cd src/eval
-python test_qwen2vl_CVBench.py 
+cd src/eval 
+```
+
+To evaluate Base + GRPO([PLACE HOLDER]) model:
+```bash
+python evaluate_Qwen2_VL_CVBench-base.py --model_path <path_to_your_model> \
+    --bs 8 \
+    --use_reasoning_prompt
+```
+To evaluate Base model:
+```bash
+python evaluate_Qwen2_VL_CVBench-base.py --model_path <path_to_your_model> \
+    --bs 8 \
+    --no-use_reasoning_prompt
+```
+To evaluate Instruct + GRPO model:
+```bash
+python evaluate_Qwen2_VL_CVBench.py --model_path <path_to_your_model> \
+    --bs 8 \
+    --use_reasoning_prompt
+```
+To evaluate Instruct model:
+```bash
+python evaluate_Qwen2_VL_CVBench.py --model_path <path_to_your_model> \
+    --bs 8 \
+    --no-use_reasoning_prompt
 ```
 
 
