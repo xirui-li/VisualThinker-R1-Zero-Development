@@ -39,7 +39,6 @@ def save_images(images_list, fold, index):
 def process_data(df, fold, total_num):
     """Process dataset and generate conversation JSON files."""
     conversations = []
-    base_conversations = []
     
     for index, example in tqdm(df.iterrows(), total=total_num, desc="Processing indices"):
         if index >= total_num:
@@ -66,24 +65,12 @@ def process_data(df, fold, total_num):
         ]
         
         conversation = {"messages": messages, "images": images}
-        base_conversation = {
-            "messages": [{
-                "role": "user",
-                "content": f"A conversation between User and Assistant. The user asks a question, and the Assistant solves it. "
-                           f"The assistant first thinks about the reasoning process in the mind and then provides the user with the answer.\n"
-                           f"User: {messages[0]['content']} \nAssistant: Let me solve this step by step.\n<think>"
-            }],
-            "answer": messages[1]['content']
-        }
 
         conversations.append(conversation)
-        base_conversations.append(base_conversation)
     
     with open(f'SAT_{fold}_{total_num}.json', 'w') as f:
         json.dump(conversations, f, indent=4)
-    
-    with open(f'SAT_{fold}_{total_num}_base.json', 'w') as f:
-        json.dump(base_conversations, f, indent=4)
+
 
 def main():
     parser = argparse.ArgumentParser(description="Process SAT dataset and generate JSON conversations.")
