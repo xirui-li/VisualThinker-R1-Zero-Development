@@ -166,7 +166,6 @@ if __name__ == "__main__":
         with open(PRECOMPUTED_RESULT, "r") as f:
             result = json.load(f)['results'][:-1]
         all_resp_outputs = [r['response'] for r in result]
-        all_desc_outputs = [r['description'] for r in result]
 
     for i, (input_example, model_resp_output) in enumerate(zip(cv_bench, all_resp_outputs)):
         # Count correct answers
