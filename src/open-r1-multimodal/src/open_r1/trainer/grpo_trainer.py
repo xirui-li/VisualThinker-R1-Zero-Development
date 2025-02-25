@@ -302,14 +302,6 @@ class Qwen2VLGRPOTrainer(Trainer):
         # This acts as a flag to indicate that the warning has already been issued.
         model.warnings_issued["estimate_tokens"] = True
 
-        # # Freeze the entire model first
-        # for param in model.parameters():
-        #     param.requires_grad = False
-
-        # # # Freeze only the vision encoder
-        # for param in model.visual.parameters():
-        #     param.requires_grad = True
-
         # Initialize the metrics
         self._metrics = defaultdict(list)
 

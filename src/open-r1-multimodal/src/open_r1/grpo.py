@@ -37,7 +37,6 @@ class GRPOScriptArguments(ScriptArguments):
         reward_funcs (`list[str]`):
             List of reward functions. Possible values: 'accuracy', 'format'.
     """
-
     reward_funcs: list[str] = field(
         default_factory=lambda: ["accuracy", "format"],
         metadata={"help": "List of reward functions. Possible values: 'accuracy', 'format'"},
@@ -49,6 +48,14 @@ class GRPOScriptArguments(ScriptArguments):
     min_pixels: Optional[int] = field(
         default=3136,
         metadata={"help": "Minimum number of pixels for the image"},
+    )
+    freeze_llm: bool = field(
+        default=False,
+        metadata={"help": "Whether to freeze the LLM parameters during training"},
+    )
+    freeze_vision: bool = field(
+        default=False,
+        metadata={"help": "Whether to freeze the vision model parameters during training"},
     )
 
 
@@ -108,7 +115,10 @@ def length_reward(completions, **kwargs):
     processor = AutoProcessor.from_pretrained("Qwen/Qwen2-VL-2B-Instruct")
     rewards = []
     for completion in completions:
-        rewards.append(len(processor.tokenizer(completion[0]["content"])['input_ids']) * 0.001)
+        if isinstance(completions[0],str):
+            rewards.append(len(processor.tokenizer(completion)['input_ids']) * 0.001)
+        else:
+            rewards.append(len(processor.tokenizer(completion[0]["content"])['input_ids']) * 0.001)
     return rewards
 
 def format_reward(completions, **kwargs):
@@ -259,247 +269,48 @@ def main(script_args, training_args, model_args):
     base_model_prompt = False
     if model_args.model_name_or_path.split("/")[-1] == "Qwen2-VL-2B" or "Base" in model_args.model_name_or_path:
         base_model_prompt = True
-
-    # Format into conversation
-    def make_conversation(example):
-        return {
-            "prompt": [
-                {"role": "system", "content": SYSTEM_PROMPT},
-                {"role": "user", "content": example["problem"]},
-            ],
-        }
     
     QUESTION_TEMPLATE = "{Question}  Output the thinking process in <think> </think> and final answer (option) in <answer> </answer> tags."
     
-    if script_args.dataset_name == "RAVEN":
-        RAVEN_prompt = "The image displays an intelligence test question featuring a 3x3 grid with nine boxes, where the 9th box is marked with a question mark (?). Your task is to select the correct shape from eight options (labeled A to H) to fill the 9th box, completing the pattern that links all the shapes together."
-        map_id2letter = {0: "A", 1: "B", 2: "C", 3: "D", 4: "E", 5:"F", 6:"G", 7:"H"}
-        def make_conversation_RAVEN(example):
-            images = example['panels']
-            choices = example['choices']
-            final_image = Image.fromarray(process_segments(images, choices))
-            prompt = f'A conversation between User and Assistant. The user asks a question about the image, and the Assistant solves it. The assistant first thinks about the reasoning process in the mind and then provides the user with the answer.\nUser: {RAVEN_prompt} \nAssistant: Let me solve this step by step.\n<think>'
-            if base_model_prompt:
-                return {"image": final_image,
-                    "prompt": [
-                                {"type": "image"},
-                                {"type": "text", "text": "<image>" + prompt}],
-                    "solution":  "<answer>" + map_id2letter[example['target']] + "</answer>", 
-                }
-            else:
-                return {
-                    "image": final_image,
-                    "prompt": [
-                        {
-                            "role": "user",
-                            "content": [
-                                {"type": "image"},
-                                {"type": "text", "text": QUESTION_TEMPLATE.format(Question=RAVEN_prompt)},
-                            ],
-                        },
-                    ],
-                    "solution":  "<answer>" + map_id2letter[example['target']] + "</answer>", 
-                }
-        dataset = load_dataset("HuggingFaceM4/RAVEN", "center_single")
-        dataset = dataset['train'].map(make_conversation_RAVEN)
-        dataset = {'train': dataset}
-    elif script_args.dataset_name == "vision-centric":
-        short_answer_prompt1 = "Please answer directly with only the letter of the correct option and nothing else."
-        short_answer_prompt2 = "Please answer directly with a single word or number."
-        def make_conversation_realworldqa(example):
-            image = example['image']
+    def make_conversation_sat(example, base_model_prompt=False):
+        if base_model_prompt:
+            image = Image.open(dataset_prefix + example["images"][0])
+            question = example["messages"][0]["content"]
+            question = question.replace("<image>", "")
+            prompt = f'A conversation between User and Assistant. The user asks a question about the image, and the Assistant solves it. The assistant first thinks about the reasoning process in the mind and then provides the user with the answer.\nUser: {question} \nAssistant: Let me solve this step by step.\n<think>'
+
             return {"image": image,
                 "prompt": [
-                    {
-                        "role": "user",
-                        "content": [
                             {"type": "image"},
-                            {"type": "text", "text": QUESTION_TEMPLATE.format(Question=example['question'].replace(short_answer_prompt1, '').replace(short_answer_prompt2, ''))},
-                        ],
-                    },
-                ],
-                "solution":  "<answer>" + example['answer'] + "</answer>", 
+                            {"type": "text", "text": "<image>" + prompt}],
+                "solution":  "<answer>" + example["messages"][1]["content"] + "</answer>", 
             }
-
-        def make_conversation_tallyqa(example):
-            return {
-                "image": example['image'],
-                "prompt": [
-                    {
-                        "role": "user",
-                        "content": [
-                            {"type": "image"},
-                            {"type": "text", "text": QUESTION_TEMPLATE.format(Question=example['question'].replace(short_answer_prompt1, '').replace(short_answer_prompt2, ''))},
-                        ],
-                    },
-                ],
-                "solution":  "<answer>" + example['answer'] + "</answer>", 
-            }
-        realworld_qa = load_dataset("xai-org/RealworldQA")
-        realworld_qa = realworld_qa.map(make_conversation_realworldqa, remove_columns=["answer"])
-        tally_qa = load_dataset("vikhyatk/tallyqa-test")
-
-        NUM_TALLY = 700
-
-        def filter_qa_pairs(example):
-            """
-            Filters out QA pairs where `is_simple == True`, keeping only complex ones.
-            """
-            example["qa"] = [qa for qa in example["qa"] if not qa["is_simple"]]
-            return example
-        
-        def flatten_tally(batch):
-            """
-            Takes a dataset row with an image and a list of QA pairs, 
-            and returns a flattened version where each QA pair is a separate row.
-            """
-            new_examples = {"image": [], "question": [], "prompt": [], "solution": []}
-
-            for image, qa_pairs in zip(batch["image"], batch["qa"]):
-                for qa in qa_pairs:
-                    new_examples["image"].append(image)  # Keep the image the same
-                    new_examples["question"].append(qa["question"])
-                    new_examples["solution"].append(qa["answer"])
-                    new_examples['prompt'].append([
-                    {
-                        "role": "user",
-                        "content": [
-                            {"type": "image"},
-                            {"type": "text", "text": QUESTION_TEMPLATE.format(Question=qa['question'])},
-                        ],
-                    },
-                ])
-                    # new_examples["is_simple"].append(qa["is_simple"])
-                    # new_examples["data_source"].append(qa["data_source"])
-            
-            return new_examples
-
-        tally_qa = tally_qa['test'].map(filter_qa_pairs)
-
-        filtered_tally = tally_qa.filter(lambda x: len(x["qa"]) > 0)
-        flattened_tally = filtered_tally.map(flatten_tally, batched=True, remove_columns=["qa"])
-
-        final_tally = flattened_tally.shuffle(seed=42).select(range(NUM_TALLY))
-        dataset = concatenate_datasets([realworld_qa['test'], final_tally])
-        dataset = {'train': dataset}
-    elif script_args.dataset_name == "SAT":
-        def make_conversation_sat(example, base_model_prompt=False):
-            if "paligemma" in model_args.model_name_or_path.lower():
-                prompt = f'A conversation between User and Assistant. The user asks a question about the image, and the Assistant solves it. The assistant first thinks about the reasoning process in the mind and then provides the user with the answer. The reasoning process and answer are enclosed within <think> </think> and <answer> </answer> tags, respectively, i.e., <think> reasoning process here </think><answer> answer here </answer>.\n User:{question}'
-                return {"image": image,
-                        "prompt": "<image>" + prompt + "Assistant: Let me solve this step by step. \n<think>",
-                    "solution":  "<answer>" + example["messages"][1]["content"] + "</answer>", 
-                }
-            else:
-                if base_model_prompt:
-                    image = Image.open(dataset_prefix + example["images"][0])
-                    question = example["messages"][0]["content"]
-                    question = question.replace("<image>", "")
-                    prompt = f'A conversation between User and Assistant. The user asks a question about the image, and the Assistant solves it. The assistant first thinks about the reasoning process in the mind and then provides the user with the answer.\nUser: {question} \nAssistant: Let me solve this step by step.\n<think>'
- 
-                    return {"image": image,
-                        "prompt": [
-                                    {"type": "image"},
-                                    {"type": "text", "text": "<image>" + prompt}],
-                        "solution":  "<answer>" + example["messages"][1]["content"] + "</answer>", 
-                    }
-                else:
-                    image = Image.open(dataset_prefix + example["images"][0])
-                    return {"image": image,
-                        "image_path": example["images"][0],
-                        "prompt": [
-                            {
-                                "role": "user",
-                                "content": [
-                                    {"type": "image"},
-                                    {"type": "text", "text": QUESTION_TEMPLATE.format(Question=example["messages"][0]["content"])},
-                                ],
-                            },
-                        ],
-                        "solution":  "<answer>" + example["messages"][1]["content"] + "</answer>", 
-                    }
-        dataset_prefix = "../data/SAT/"
-        dataset_path = "SAT_train_15000.json"
-        
-        import json
-        # load json file 
-        with open(dataset_prefix + dataset_path, 'r') as f:
-            sat_dataset = json.load(f)
-
-        dataset = [make_conversation_sat(sample, base_model_prompt) for sample in sat_dataset]
-        dataset = {'train': dataset}
-
-    elif script_args.dataset_name == "LLaVA-OneVision":
-        data_list = [
-                     'CLEVR-Math(MathV360K)', 
-                     'GEOS(MathV360K)', 
-                     'Geometry3K(MathV360K)', 
-                     'UniGeo(MathV360K)', 
-                     'TabMWP(MathV360K)', 
-                     'FigureQA(MathV360K)'
-                     ]
-        
-        dataset_list = []
-        data_len = []
-        def make_conversation_image(example):
-            return {
-                "prompt": [
-                    {"role": "user", "content": [{"type": "image"}, 
-                                                {"type": "text", "text": QUESTION_TEMPLATE.format(Question=example["conversations"][0]["value"])}
-                                                ]
-                    },
-                ],
-                "solution": example["conversations"][1]["value"],
-                "image": example['image']
-            }
-
-        for data_name in data_list:
-            data = load_dataset("lmms-lab/LLaVA-OneVision-Data", data_name, split="train")
-            dataset_list.append(data)
-            data_len.append(len(data))
-        dataset = []
-        # random sample dataset with ratio 0.1
-        ratio = 0.1
-        for i in range(len(dataset_list)):
-            dataset_list[i] = dataset_list[i].shuffle(seed=42).select(range(int(data_len[i]*ratio)))
-            dataset += [make_conversation_image(sample) for sample in dataset_list[i]]
-        
-        dataset = {'train': dataset}
-    else:
-        # Load the dataset
-        dataset = load_dataset(script_args.dataset_name, name=script_args.dataset_config)
-
-
-        # Format into conversation
-        def make_conversation(example):
-            return {
-                "prompt": [
-                    {"role": "system", "content": SYSTEM_PROMPT},
-                    {"role": "user", "content": example["problem"]},
-                ],
-            }
-        def make_conversation_image(example):
-            return {
-                "prompt": [
-                    {
-                        "role": "user",
-                        "content": [
-                            {"type": "image"},
-                            {"type": "text", "text": QUESTION_TEMPLATE.format(Question=example["problem"])},
-                        ],
-                    },
-                ],
-            }
-        
-        if "image" in dataset[script_args.dataset_train_split].features:
-            print("has image in dataset")
-            dataset = dataset.map(make_conversation_image)  # Utilize multiprocessing for faster mapping
-            # dataset = dataset.remove_columns(["original_question", "original_answer"])
-
         else:
-            print("no image in dataset")
-            dataset = dataset.map(make_conversation)
-            dataset = dataset.remove_columns("messages")
+            image = Image.open(dataset_prefix + example["images"][0])
+            return {"image": image,
+                "image_path": example["images"][0],
+                "prompt": [
+                    {
+                        "role": "user",
+                        "content": [
+                            {"type": "image"},
+                            {"type": "text", "text": QUESTION_TEMPLATE.format(Question=example["messages"][0]["content"])},
+                        ],
+                    },
+                ],
+                "solution":  "<answer>" + example["messages"][1]["content"] + "</answer>", 
+            }
+    dataset_prefix = "/workspace/testgit/Multimodal-R1/src/data/SAT/"
+    dataset_path = "SAT_train_15000.json"
+    
+    import json
+    # load json file 
+    with open(dataset_prefix + dataset_path, 'r') as f:
+        sat_dataset = json.load(f)
+
+    dataset = [make_conversation_sat(sample, base_model_prompt) for sample in sat_dataset]
+    dataset = {'train': dataset}
+
 
     trainer_cls = Qwen2VLGRPOTrainer
 
@@ -515,8 +326,11 @@ def main(script_args, training_args, model_args):
         max_pixels=script_args.max_pixels,
         min_pixels=script_args.min_pixels,
     )
-
-    # trainer.model.visual.requires_grad_ = False # Uncomment for vision-encoder freezed training
+    
+    if script_args.freeze_vision:
+        trainer.model.visual.requires_grad_ = False
+    elif script_args.freeze_llm:
+        trainer.model.model.requires_grad_ = False
     # Train and push the model to the Hub
     trainer.train()
 
