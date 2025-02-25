@@ -6,7 +6,15 @@
 ![Qwen-VL](https://img.shields.io/badge/Model-Qwen--VL-green)
 ![Aha-Moment](https://img.shields.io/badge/Analysis-Aha--moment-green) 
 
-This is the under-development repo for our [].
+[PLACE HOLDER] is a reproduction of DeepSeek R1 Zero in vision centric tasks. We built upon veRL and R1-V.
+
+Through simple RL Receip, the 2B base LM develops self-verification all on its own and exhibits an emergent ability to "take another look" at the image and correct its mistakes.
+
+Twitter thread: [PLACE HOLDER]
+
+Full experiment log: [PLACE HOLDER]
+
+Paper's on it's way, stay tuned!
 
 ## Setup
 
