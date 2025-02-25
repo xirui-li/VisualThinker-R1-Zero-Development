@@ -68,10 +68,6 @@ if __name__ == "__main__":
     OUTPUT_DIR=args.output_dir
     PRECOMPUTED_RESULT=args.precomputed_json
 
-    QUESTION_TEMPLATE = "{Question} First output the thinking process in <think> </think> and final answer (number) in <answer> </answer> tags."
-    SHORT_QUESTION_TAMPLE = "{Question} Directly generate the correct answer."
-    DESCRIBE_TEMPLATE = "Describe this image in details."
-
     correct_counter = 0
     counter_task = {
         'Count': 0,
