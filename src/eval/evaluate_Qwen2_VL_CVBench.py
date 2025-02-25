@@ -68,7 +68,6 @@ if __name__ == "__main__":
     OUTPUT_DIR=args.output_dir
     PRECOMPUTED_RESULT=args.precomputed_json
 
-    # import pdb; pdb.set_trace()
     QUESTION_TEMPLATE = "{Question} First output the thinking process in <think> </think> and final answer (number) in <answer> </answer> tags."
     SHORT_QUESTION_TAMPLE = "{Question} Directly generate the correct answer."
     DESCRIBE_TEMPLATE = "Describe this image in details."
@@ -100,15 +99,15 @@ if __name__ == "__main__":
         model.eval()
         # default processer
         processor = AutoProcessor.from_pretrained(MODEL_PATH)
-        # processor.tokenizer.padding_side = 'left'
+        processor.tokenizer.padding_side = 'left'
 
         resp_messages = []
 
         for i, example in tqdm(enumerate(cv_bench)):
             if args.use_reasoning_prompt:
-                resp_prompt = example['question'] + ' Select from the following choices.\n' + ', '.join(example['choices'][:-1]) + ", or " + example['choices'][-1] + "\nOutput the thinking process in <think> </think> and final answer in <answer> </answer> tags."
+                resp_prompt = example['prompt'] + "\nOutput the thinking process in <think> </think> and final answer in <answer> </answer> tags."
             else:
-                resp_prompt = example['question'] + ' Select from the following choices.\n' + ', '.join(example['choices'][:-1]) + ", or " + example['choices'][-1] + "\nPlease select the correct answer from the options above and answer with letter option.\n"
+                resp_prompt = example['prompt']
 
             resp_message = [
                 {
@@ -126,7 +125,7 @@ if __name__ == "__main__":
             resp_messages.append(resp_message)
 
 
-        all_desc_outputs = []  # List to store all answers
+        # List to store all answers
         all_resp_outputs = []
         # Process data in batches
 
@@ -231,7 +230,9 @@ if __name__ == "__main__":
     if not os.path.exists(OUTPUT_DIR):
         os.makedirs(OUTPUT_DIR)
 
-    with open(os.path.join(OUTPUT_DIR, f"CVBench_result.json"), "w") as f:
+    model_name = MODEL_PATH.split('/')[-1]
+    reasoning_tag = "reasoning" if args.use_reasoning_prompt else "no_reasoning"
+    with open(os.path.join(OUTPUT_DIR, f"CVBench_result_{model_name}_{reasoning_tag}.json"), "w") as f:
         json.dump({
             'results': final_output,
             "accuracy": acc,
