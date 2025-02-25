@@ -6,15 +6,23 @@
 ![Qwen-VL](https://img.shields.io/badge/Model-Qwen--VL-green)
 ![Aha-Moment](https://img.shields.io/badge/Analysis-Aha--moment-green) 
 
-[PLACE HOLDER] is a reproduction of DeepSeek R1 Zero in vision centric tasks. We built upon veRL and R1-V.
+[PLACE HOLDER] is a reproduction of DeepSeek R1 Zero in vision centric tasks. We built upon Open-R1-Multimodal and R1-V.
 
-Through simple RL Receip, the 2B base LM develops self-verification all on its own and exhibits an emergent ability to "take another look" at the image and correct its mistakes.
+Through applying GRPO on the 2B base LM develops self-verification autonomously and exhibits an emergent ability to "take another look" at the image and correct its mistakes.
 
 Twitter thread: [PLACE HOLDER]
 
 Full experiment log: [PLACE HOLDER]
 
 Paper's on it's way, stay tuned!
+
+**Blogs:**
+
+[PLACE HOLDER]
+
+### Updates:
+- 2025-02-24: We release the [PLACE HOLDER] repo.
+
 
 ## Setup
 
