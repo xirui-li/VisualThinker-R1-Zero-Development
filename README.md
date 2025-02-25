@@ -42,3 +42,25 @@ python test_qwen2vl_CVBench.py
 > 1. To reproduce the result, keep the per_device_train_batch_size to 1 for now, as there is a revealed bug about batched training. See the [reproduction report](https://github.com/Deep-Agent/R1-V/issues/4#issuecomment-2633348354) here. We realize it is important for effiency and are working on solving it with the community.
 > 2. If you meet **OOM Error**, add `--deepspeed local_scripts/zero3.json` following https://github.com/Deep-Agent/R1-V/issues/18 or you can reduce `--num_generations`
 
+
+# :coffee: Stay Connected!
+
+We are always open to engaging discussions, collaborations, or even just sharing a virtual coffee. To get in touch or join our team, visit [TurningPoint AI](https://www.turningpoint-ai.com/)'s homepage for contact information.
+
+
+# :white_check_mark: Cite
+
+If you find our research useful for your your research and applications, please kindly cite using this BibTeX: *placeholder*
+
+```latex
+@misc{li2024mossbenchmultimodallanguagemodel,
+      title={MOSSBench: Is Your Multimodal Language Model Oversensitive to Safe Queries?}, 
+      author={Xirui Li and Hengguang Zhou and Ruochen Wang and Tianyi Zhou and Minhao Cheng and Cho-Jui Hsieh},
+      year={2024},
+      eprint={2406.17806},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2406.17806}, 
+}
+```
+
