@@ -10,15 +10,19 @@
 
 Through applying GRPO on the 2B base LM develops self-verification autonomously and exhibits an emergent ability to "take another look" at the image and correct its mistakes.
 
-Twitter thread: [PLACE HOLDER]
+**TL;DR:**
+1. We are the **first to replicate a key characteristic** of R1 success (**”aha moment”** and **increasing reasoning length**) on **multimodal** reasoning tasks.
 
-Full experiment log: [PLACE HOLDER]
+2. We showed that **vision-centric** tasks could also benefit from improved reasoning capabilities.
 
+   
 Paper's on it's way, stay tuned!
 
-**Blogs:**
+**Twitter thread: ** [PLACE HOLDER]
 
-[PLACE HOLDER]
+**Full experiment log:** [PLACE HOLDER]
+
+**Blogs:** [PLACE HOLDER]
 
 ### Updates:
 - 2025-02-24: We release the [PLACE HOLDER] repo.
@@ -42,7 +46,7 @@ bash prepare_dataset.sh
 To reproduce checkpoing on different dataset, replace the sh file in the following command with run_grpo_{dataset_name}.sh
 ```bash
 cd src/open-r1-multimodal
-sh run_grpo_SAT.sh # Adjust open-r1-multimodal/configs/zero3.yaml or zero2.yaml accordingly # Full training for 2 epochs take more than 50 hours, we usually can observe reward peak and stop at step 100~500
+sh run_grpo_SAT.sh # Adjust open-r1-multimodal/configs/zero3.yaml or zero2.yaml accordingly
 ```
 
 ### SFT Training
