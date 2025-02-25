@@ -122,9 +122,9 @@ if __name__ == "__main__":
             question = example['prompt']
 
             if args.use_reasoning_prompt:
-                res_prompt = f'A conversation between User and Assistant. The user asks a question about the image, and the Assistant solves it.\nUser: {question} \nAssistant: '
-            else:
                 res_prompt = f'A conversation between User and Assistant. The user asks a question about the image, and the Assistant solves it. The assistant first thinks about the reasoning process in the mind and then provides the user with the answer.\nUser: {question} \nAssistant: Let me solve this step by step.\n<think>'
+            else:
+                res_prompt = f'A conversation between User and Assistant. The user asks a question about the image, and the Assistant solves it.\nUser: {question} \nAssistant: '
 
             resp_message = [
 
