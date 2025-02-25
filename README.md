@@ -4,6 +4,12 @@
 
 [![Notion](https://img.shields.io/badge/Notion-%23000000.svg?style=for-the-badge&logo=notion&logoColor=white)](https://hkust-nlp.notion.site/simplerl-reason)
 
+![Reinforcement Learning](https://img.shields.io/badge/Algo-Reinforcement--Learning-red) 
+![R1](https://img.shields.io/badge/Algo-R1-red) 
+![Vision-Centric](https://img.shields.io/badge/Task-Vision--Perception-yellow) 
+![Qwen-VL](https://img.shields.io/badge/Model-Qwen--VL-green)
+![Aha-Moment](https://img.shields.io/badge/Analysis-Aha--moment-green) 
+
 </div>
 
 <div align="center">
@@ -30,12 +36,6 @@ But wait! I can think of something else.
 Maybe it's just higher than above the doorway, but slightly lower than above the doorway.
 . . .
 ```
-
-![Reinforcement Learning](https://img.shields.io/badge/Algo-Reinforcement--Learning-red) 
-![R1](https://img.shields.io/badge/Algo-R1-red) 
-![Vision-Centric](https://img.shields.io/badge/Task-Vision--Perception-yellow) 
-![Qwen-VL](https://img.shields.io/badge/Model-Qwen--VL-green)
-![Aha-Moment](https://img.shields.io/badge/Analysis-Aha--moment-green) 
 
 **Twitter thread:** [PLACE HOLDER]
 
