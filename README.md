@@ -44,8 +44,8 @@ Maybe it's just higher than above the doorway, but slightly lower than above the
 **Blogs:** Upcoming
 
 ### Updates:
-- 2025-02-24: We share our main findings in this notion blog.
-- 2025-02-24: We release the VisualThinker R1 Zero repo.
+- 2025-02-26: We share our main findings in this notion blog.
+- 2025-02-26: We release the VisualThinker R1 Zero repo.
 
 
 ## Setup
