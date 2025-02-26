@@ -27,7 +27,7 @@ Through applying GRPO on the 2B base LM develops self-verification autonomously 
 
 2. We showed that **vision-centric** tasks could also benefit from improved reasoning capabilities.  
 
-Similar to DeepSeek R1, self reflection behavior is also observed during our RL training on vision-centric reasoning tasks: the model exhibits an emergent ability to rethink and correct its mistakes.:
+Similar to DeepSeek R1, self reflection behavior is also observed during our RL training on vision-centric reasoning tasks. The model exhibits an emergent ability to rethink and correct its mistakes:
 
 ```
 . . .
