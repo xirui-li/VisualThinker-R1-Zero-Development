@@ -16,7 +16,7 @@
 <img src="https://multimodal-r1.s3.us-west-1.amazonaws.com/Training_Steps.png" width="700" alt="simplelr-reaoning-intro-figure_00">
 </div>
 
-> Training dynamics of our [Place Holder] training starting from the Qwen-VL-2B, without SFT or reward models. An aha moment and increasing response length is ever observed at a multimodal model.
+> Training dynamics of our VisionThinker-R1-Zero training starting from the Qwen-VL-2B, without SFT or reward models. An aha moment and increasing response length is ever observed at a multimodal model.
 
 [DeepSeek R1](https://arxiv.org/abs/2501.12948) has demonstrated how Reinforcement Learning (RL) with well-designed rule-based rewards can enable a large language model to build unique reasoning capabilities autonomously. Since then, many researchers have attempted to extend this success to multimodal reasoning. However, recent efforts primarily **struggle to reproduce the increasing response length and thinking pattern** exhibited by DeepSeek R1. 
 
@@ -127,7 +127,8 @@ If you find our research useful for your your research and applications, please 
       title={The Multimodal “Aha Moment” on 2B Model}, 
       author={Hengguang Zhou and Xirui Li and Ruochen Wang and Minhao Cheng and Tianyi Zhou and Cho-Jui Hsieh},
       year={2025},
-      note={Notion Blog}
+      howpublished={\url{https://hkust-nlp.notion.site/simplerl-reason}},
+      note={Notion Blog},
 }
 ```
 
