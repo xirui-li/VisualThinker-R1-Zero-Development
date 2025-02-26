@@ -126,7 +126,7 @@ If you find our work useful for your projects, please kindly cite the following 
       author={Hengguang Zhou and Xirui Li and Ruochen Wang and Minhao Cheng and Tianyi Zhou and Cho-Jui Hsieh},
       year={2025},
       howpublished={\url{https://github.com/turningpoint-ai/VisualThinker-R1-Zero}},
-      note={Notion Blog}
+      note={Github}
 }
 ```
 
