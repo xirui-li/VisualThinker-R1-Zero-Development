@@ -123,14 +123,10 @@ We sincerely thank [DeepSeek](https://github.com/deepseek-ai/DeepSeek-R1), [Open
 If you find our research useful for your your research and applications, please kindly cite using this BibTeX:
 
 ```latex
-@misc{li2024mossbenchmultimodallanguagemodel,
-      title={MOSSBench: Is Your Multimodal Language Model Oversensitive to Safe Queries?}, 
-      author={Xirui Li and Hengguang Zhou and Ruochen Wang and Tianyi Zhou and Minhao Cheng and Cho-Jui Hsieh},
-      year={2024},
-      eprint={2406.17806},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2406.17806}, 
+@misc{zhou2024visionthinker,
+      title={The Multimodal “Aha Moment” on 2B Model}, 
+      author={Hengguang Zhou and Xirui Li and Ruochen Wang and Minhao Cheng and Tianyi Zhou and Cho-Jui Hsieh},
+      year={2025}
 }
 ```
 
