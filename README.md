@@ -13,7 +13,7 @@
 </div>
 
 <div align="center">
-<img src="https://multimodal-r1.s3.us-west-1.amazonaws.com/Training_Steps.png" width="700" alt="simplelr-reaoning-intro-figure_00">
+<img src="https://multimodal-r1.s3.us-west-1.amazonaws.com/Training_Steps.png" width="700" alt="visualthinking-intro-figure_00">
 </div>
 
 > Training dynamics of our VisionThinker-R1-Zero training starting from the Qwen-VL-2B, without SFT or reward models. An aha moment and increasing response length is ever observed at a multimodal model.
