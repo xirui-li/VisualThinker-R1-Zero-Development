@@ -124,7 +124,6 @@ If you find our work useful for your projects, please kindly cite the following 
 @misc{zhou2024visualthinkerr1,
       title={The Multimodal “Aha Moment” on 2B Model}, 
       author={Hengguang Zhou and Xirui Li and Ruochen Wang and Minhao Cheng and Tianyi Zhou and Cho-Jui Hsieh},
-      year={2025},
       journal= {arXiv preprint arXiv:XXXX.XXXXX},
       year={2025},
       url={https://arxiv.org/abs/XXXX.XXXXX}
