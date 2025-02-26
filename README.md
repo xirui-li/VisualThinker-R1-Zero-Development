@@ -68,7 +68,7 @@ sh run_grpo_SAT.sh # Adjust open-r1-multimodal/configs/zero3.yaml or zero2.yaml 
 ```
 
 ### SFT Training
-
+To obtain SFT model for comparison, run the following code to train the unaligned base model with GRPO on SAT:
 ```bash
 cd src/open-r1-multimodal
 sh run_sft.sh # Adjust open-r1-multimodal/configs/zero3.yaml or zero2.yaml accordingly
