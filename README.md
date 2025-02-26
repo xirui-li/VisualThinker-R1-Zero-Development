@@ -82,7 +82,7 @@ First change to evaluation directory:
 cd src/eval 
 ```
 
-To evaluate Base + GRPO(VisualThinker R1 Zero) model:
+To evaluate Base + GRPO (VisualThinker R1 Zero) model:
 ```bash
 python evaluate_Qwen2_VL_CVBench-base.py --model_path <path_to_your_model> \
     --bs 8 \
