@@ -1,6 +1,6 @@
 <div align="center">
 
-# [Place Holder]
+# VisionThinker R1
 
 [![Notion](https://img.shields.io/badge/Notion-%23000000.svg?style=for-the-badge&logo=notion&logoColor=white)](https://hkust-nlp.notion.site/simplerl-reason)
 
@@ -123,7 +123,7 @@ We sincerely thank [DeepSeek](https://github.com/deepseek-ai/DeepSeek-R1), [Open
 If you find our research useful for your your research and applications, please kindly cite using this BibTeX:
 
 ```latex
-@misc{zhou2024visionthinker,
+@misc{zhou2024visionthinkerr1,
       title={The Multimodal “Aha Moment” on 2B Model}, 
       author={Hengguang Zhou and Xirui Li and Ruochen Wang and Minhao Cheng and Tianyi Zhou and Cho-Jui Hsieh},
       year={2025}
