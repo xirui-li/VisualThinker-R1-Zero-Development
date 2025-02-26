@@ -20,7 +20,7 @@
 
 [DeepSeek R1](https://arxiv.org/abs/2501.12948) has demonstrated how Reinforcement Learning (RL) with well-designed rule-based rewards can enable a large language model to build unique reasoning capabilities autonomously. Since then, many researchers have attempted to extend this success to multimodal reasoning. However, recent efforts primarily **struggle to reproduce the increasing response length and thinking pattern** exhibited by DeepSeek R1. 
 
-[PLACE HOLDER] is a replication of DeepSeek-R1-Zero training on **small multimodal** models. We are **the first** to successfully observe **the emergent “aha moment”** and **increased response** length on **multimodal** tasks.
+VisionThinker-R1-Zero is a replication of DeepSeek-R1-Zero training on **small multimodal** models. We are **the first** to successfully observe **the emergent “aha moment”** and **increased response** length on **multimodal** tasks.
 Through applying GRPO on the 2B base LM develops self-verification autonomously and exhibits an emergent ability to "take another look" at the image and correct its mistakes.
 
 1. We are the **first to replicate a key characteristic** of R1 success (**”aha moment”** and **increasing reasoning length**) on **multimodal** reasoning tasks.
