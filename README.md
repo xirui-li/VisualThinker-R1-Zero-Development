@@ -61,7 +61,7 @@ bash prepare_dataset.sh
 ## Training
 
 ### GRPO Training
-To reproduce the multimodal aha moment, run the following code:
+To reproduce the multimodal aha moment, run the following code to train the unaligned base model with GRPO on SAT:
 ```bash
 cd src/open-r1-multimodal
 sh run_grpo_SAT.sh # Adjust open-r1-multimodal/configs/zero3.yaml or zero2.yaml accordingly
