@@ -127,8 +127,8 @@ If you find our research useful for your your research and applications, please 
       title={The Multimodal “Aha Moment” on 2B Model}, 
       author={Hengguang Zhou and Xirui Li and Ruochen Wang and Minhao Cheng and Tianyi Zhou and Cho-Jui Hsieh},
       year={2025},
-      howpublished={\url{https://hkust-nlp.notion.site/simplerl-reason}},
-      note={Notion Blog},
+      howpublished={\url{https://github.com/turningpoint-ai/VisualThinker-R1-Zero}},
+      note={Notion Blog}
 }
 ```
 
