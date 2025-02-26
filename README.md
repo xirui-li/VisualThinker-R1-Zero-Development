@@ -1,6 +1,6 @@
 <div align="center">
 
-# VisionThinker R1
+# VisualThinker R1 Zero
 
 [![Notion](https://img.shields.io/badge/Notion-%23000000.svg?style=for-the-badge&logo=notion&logoColor=white)](https://hkust-nlp.notion.site/simplerl-reason)
 
