@@ -7,7 +7,7 @@
 ![Reinforcement Learning](https://img.shields.io/badge/Algo-Reinforcement--Learning-red) 
 ![R1](https://img.shields.io/badge/Algo-R1-red) 
 ![Vision-Centric](https://img.shields.io/badge/Task-Vision--Centric-yellow) 
-![Qwen-VL](https://img.shields.io/badge/Model-Qwen--VL-green)
+![Qwen2-VL-2B](https://img.shields.io/badge/Model-Qwen2--VL--2B-green)
 ![Aha-Moment](https://img.shields.io/badge/Analysis-Aha--moment-blue) 
 
 </div>
