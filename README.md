@@ -37,11 +37,9 @@ Maybe it's just higher than above the doorway, but slightly lower than above the
 . . .
 ```
 
-**Twitter thread:** Upcoming
-
 **Full experiment log:** Upcoming
 
-**Blogs:** Upcoming
+**Models CKPT:** Upcoming
 
 ### Updates:
 - 2025-02-26: We share our main findings in this notion blog.
