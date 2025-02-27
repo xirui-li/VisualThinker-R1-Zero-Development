@@ -23,7 +23,7 @@
 VisionThinker-R1-Zero is a replication of DeepSeek-R1-Zero training on **small multimodal** models. We are **the first** to successfully observe **the emergent “aha moment”** and **increased response** length on **multimodal** tasks.
 Through applying GRPO on the 2B base LM develops self-verification autonomously and exhibits an emergent ability to "take another look" at the image and correct its mistakes.
 
-1. We are the **first to replicate a key characteristic** of R1 success (**”aha moment”** and **increasing reasoning length**) on **multimodal** reasoning tasks.
+1. We are the **first to replicate the key characteristics** of R1 success (**”aha moment”** and **increasing reasoning length**) on **multimodal** reasoning tasks.
 
 2. We showed that **vision-centric** tasks could also benefit from improved reasoning capabilities.  
 
