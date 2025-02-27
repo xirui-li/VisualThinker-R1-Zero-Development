@@ -502,9 +502,14 @@ class Qwen2VLGRPOTrainer(Trainer):
             os.makedirs(save_dir, exist_ok=True)
             save_path = os.path.join(save_dir, f"rank{self.accelerator.process_index}.jsonl")
             with open(save_path, "w") as f:
-                json.dump({
-                    'trajectories': [{"messages": {"prompt": p[0], "response": c[0]} if len(p) == 1 else {"prompt": p[1]['text'], "response":c}, "solution": inputs[0]['solution'], "reward": r} for p, c, r in zip(prompts, completions, rewards.view(self.num_generations).tolist())],
-                }, f, indent=2)
+                try:
+                    json.dump({
+                        'trajectories': [{"messages": {"prompt": p[0], "response": c[0]} if len(p) == 1 else {"prompt": p[1]['text'], "response":c}, "solution": inputs[0]['solution'], "reward": r} for p, c, r in zip(prompts, completions, rewards.view(self.num_generations).tolist())],
+                    }, f, indent=2)
+                except Exception as e:
+                    json.dump({
+                        'trajectories': [{"messages": {"prompt": p[0], "response": c[0]} if len(p) == 1 else {"prompt": p[1]['content'][1]['text'], "response":c[0]['content']}, "solution": inputs[0]['solution'], "reward": r} for p, c, r in zip(prompts, completions, rewards.view(self.num_generations).tolist())],
+                    }, f, indent=2)
         # x - x.detach() allows for preserving gradients from x
         per_token_loss = torch.exp(per_token_logps - per_token_logps.detach()) * advantages.unsqueeze(1)
         per_token_loss = -(per_token_loss - self.beta * per_token_kl)

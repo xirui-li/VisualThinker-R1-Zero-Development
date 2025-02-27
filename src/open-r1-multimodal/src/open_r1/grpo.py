@@ -148,8 +148,13 @@ def main(script_args, training_args, model_args):
     base_model_prompt = False
     if model_args.model_name_or_path.split("/")[-1] == "Qwen2-VL-2B" or "Base" in model_args.model_name_or_path:
         base_model_prompt = True
+
+    reflection_guidance = True
     
-    QUESTION_TEMPLATE = "{Question}  Output the thinking process in <think> </think> and final answer (option) in <answer> </answer> tags."
+    if not reflection_guidance:
+        QUESTION_TEMPLATE = "{Question}  Output the thinking process in <think> </think> and final answer (option) in <answer> </answer> tags."
+    else:
+        QUESTION_TEMPLATE = "{Question}  Output the thinking process in <think> </think> and final answer (option) in <answer> </answer> tags. If you detect that you made a mistake in your reasoning at any point, correct yourself inside <reflection></reflection> tags."
     
     def make_conversation_sat(example, base_model_prompt=False):
         if base_model_prompt:
@@ -166,19 +171,38 @@ def main(script_args, training_args, model_args):
             }
         else:
             image = Image.open(dataset_prefix + example["images"][0])
-            return {"image": image,
-                "image_path": example["images"][0],
-                "prompt": [
-                    {
-                        "role": "user",
-                        "content": [
-                            {"type": "image"},
-                            {"type": "text", "text": QUESTION_TEMPLATE.format(Question=example["messages"][0]["content"])},
-                        ],
-                    },
-                ],
-                "solution":  "<answer>" + example["messages"][1]["content"] + "</answer>", 
-            }
+            if not reflection_guidance:
+                return {"image": image,
+                    "image_path": example["images"][0],
+                    "prompt": [
+                        {
+                            "role": "user",
+                            "content": [
+                                {"type": "image"},
+                                {"type": "text", "text": QUESTION_TEMPLATE.format(Question=example["messages"][0]["content"])},
+                            ],
+                        },
+                    ],
+                    "solution":  "<answer>" + example["messages"][1]["content"] + "</answer>", 
+                }
+            else:
+                return {"image": image,
+                    "image_path": example["images"][0],
+                    "prompt": [
+                        {
+                            "role": "system",
+                            "content": "You are a helpful assistant capable of complex reasoning and reflection."
+                        },
+                        {
+                            "role": "user",
+                            "content": [
+                                {"type": "image"},
+                                {"type": "text", "text": QUESTION_TEMPLATE.format(Question=example["messages"][0]["content"])},
+                            ],
+                        },
+                    ],
+                    "solution":  "<answer>" + example["messages"][1]["content"] + "</answer>", 
+                }
     dataset_prefix = "../data/SAT/"
     dataset_path = "SAT_train_15000.json"
     
