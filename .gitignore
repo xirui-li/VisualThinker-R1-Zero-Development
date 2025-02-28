@@ -20,3 +20,6 @@ src/open-r1-multimodal/wandb/
 
 # folder
 src/open-r1-multimodal/trajactories/
+
+# outputs
+src/open-r1-multimodal/outputs/
