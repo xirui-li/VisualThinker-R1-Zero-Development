@@ -155,64 +155,96 @@ def main(script_args, training_args, model_args):
         QUESTION_TEMPLATE = "{Question}  Output the thinking process in <think> </think> and final answer (option) in <answer> </answer> tags."
     else:
         QUESTION_TEMPLATE = "{Question}  Output the thinking process in <think> </think> and final answer (option) in <answer> </answer> tags. If you detect that you made a mistake in your reasoning at any point, correct yourself inside <reflection></reflection> tags."
-    
-    def make_conversation_sat(example, base_model_prompt=False):
-        if base_model_prompt:
-            image = Image.open(dataset_prefix + example["images"][0])
-            question = example["messages"][0]["content"]
-            question = question.replace("<image>", "")
-            prompt = f'A conversation between User and Assistant. The user asks a question about the image, and the Assistant solves it. The assistant first thinks about the reasoning process in the mind and then provides the user with the answer.\nUser: {question} \nAssistant: Let me solve this step by step.\n<think>'
 
-            return {"image": image,
-                "prompt": [
-                            {"type": "image"},
-                            {"type": "text", "text": "<image>" + prompt}],
-                "solution":  "<answer>" + example["messages"][1]["content"] + "</answer>", 
-            }
-        else:
-            image = Image.open(dataset_prefix + example["images"][0])
-            if not reflection_guidance:
+    if script_args.dataset_name == "SAT":
+    
+        def make_conversation_sat(example, base_model_prompt=False):
+            if base_model_prompt:
+                image = Image.open(dataset_prefix + example["images"][0])
+                question = example["messages"][0]["content"]
+                question = question.replace("<image>", "")
+                prompt = f'A conversation between User and Assistant. The user asks a question about the image, and the Assistant solves it. The assistant first thinks about the reasoning process in the mind and then provides the user with the answer.\nUser: {question} \nAssistant: Let me solve this step by step.\n<think>'
+
                 return {"image": image,
-                    "image_path": example["images"][0],
                     "prompt": [
-                        {
-                            "role": "user",
-                            "content": [
                                 {"type": "image"},
-                                {"type": "text", "text": QUESTION_TEMPLATE.format(Question=example["messages"][0]["content"])},
-                            ],
-                        },
-                    ],
+                                {"type": "text", "text": "<image>" + prompt}],
                     "solution":  "<answer>" + example["messages"][1]["content"] + "</answer>", 
                 }
             else:
-                return {"image": image,
-                    "image_path": example["images"][0],
-                    "prompt": [
-                        {
-                            "role": "system",
-                            "content": "You are a helpful assistant capable of complex reasoning and reflection."
-                        },
-                        {
-                            "role": "user",
-                            "content": [
-                                {"type": "image"},
-                                {"type": "text", "text": QUESTION_TEMPLATE.format(Question=example["messages"][0]["content"])},
-                            ],
-                        },
-                    ],
-                    "solution":  "<answer>" + example["messages"][1]["content"] + "</answer>", 
-                }
-    dataset_prefix = "../data/SAT/"
-    dataset_path = "SAT_train_15000.json"
-    
-    import json
-    # load json file 
-    with open(dataset_prefix + dataset_path, 'r') as f:
-        sat_dataset = json.load(f)
+                image = Image.open(dataset_prefix + example["images"][0])
+                if not reflection_guidance:
+                    return {"image": image,
+                        "image_path": example["images"][0],
+                        "prompt": [
+                            {
+                                "role": "user",
+                                "content": [
+                                    {"type": "image"},
+                                    {"type": "text", "text": QUESTION_TEMPLATE.format(Question=example["messages"][0]["content"])},
+                                ],
+                            },
+                        ],
+                        "solution":  "<answer>" + example["messages"][1]["content"] + "</answer>", 
+                    }
+                else:
+                    return {"image": image,
+                        "image_path": example["images"][0],
+                        "prompt": [
+                            {
+                                "role": "system",
+                                "content": "You are a helpful assistant capable of complex reasoning and reflection."
+                            },
+                            {
+                                "role": "user",
+                                "content": [
+                                    {"type": "image"},
+                                    {"type": "text", "text": QUESTION_TEMPLATE.format(Question=example["messages"][0]["content"])},
+                                ],
+                            },
+                        ],
+                        "solution":  "<answer>" + example["messages"][1]["content"] + "</answer>", 
+                    }
+        dataset_prefix = "../data/SAT/"
+        dataset_path = "SAT_train_15000.json"
+        
+        import json
+        # load json file 
+        with open(dataset_prefix + dataset_path, 'r') as f:
+            sat_dataset = json.load(f)
 
-    dataset = [make_conversation_sat(sample, base_model_prompt) for sample in sat_dataset]
-    dataset = {'train': dataset}
+        dataset = [make_conversation_sat(sample, base_model_prompt) for sample in sat_dataset]
+        dataset = {'train': dataset}
+    
+    elif script_args.dataset_name == "Geo3k":
+
+        dataset_name = "hiyouga/geometry3k"
+        geo_dataset = load_dataset(dataset_name, split="train")
+
+        def make_conversation_geo3k(example, base_model_prompt=False):
+            if base_model_prompt:
+                question_str = example["problem"]
+                options = example["choices"]
+                # combine the options into a single string
+                options_str = ", ".join([f"{chr(65 + i)}: {option}" for i, option in enumerate(options)])
+                question = f"{question_str} Choose between the following options: {options_str}"
+                question = question.replace("<image>", "")
+                prompt = f'A conversation between User and Assistant. The user asks a question about the image, and the Assistant solves it. The assistant first thinks about the reasoning process in the mind and then provides the user with the answer.\nUser: {question} \nAssistant: Let me solve this step by step.\n<think>'
+                ground_truth = example["ground_truth"]
+                answer = example["answer"]
+                return {"image": example["images"][0],
+                    "prompt": [
+                                {"type": "image"},
+                                {"type": "text", "text": "<image>" + prompt}],
+                    "solution":  "<answer>" + ground_truth + "</answer>", 
+                    "answer": "<answer>" + answer + "</answer>",
+                }
+            else:
+                print("Not implemented yet!")
+                import pdb; pdb.set_trace()
+
+        dataset = [make_conversation_geo3k(sample, base_model_prompt) for sample in geo_dataset]
+        dataset = {'train': dataset}
 
     trainer_cls = Qwen2VLGRPOTrainer
 
