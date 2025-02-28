@@ -43,7 +43,6 @@ def process_data(df, fold, total_num):
     for index, example in tqdm(df.iterrows(), total=total_num, desc="Processing indices"):
         if index >= total_num:
             break
-        print(f"Processing index: {index}")
         
         images_list = extract_images(example['image_bytes'])
         if len(images_list) > 1:

@@ -503,7 +503,7 @@ class Qwen2VLGRPOTrainer(Trainer):
             save_path = os.path.join(save_dir, f"rank{self.accelerator.process_index}.jsonl")
             with open(save_path, "w") as f:
                 json.dump({
-                    'trajectories': [{"messages": p + c if type(p) is str else {"prompt": p[1]['text'], "response":c}, "solution": inputs[0]['solution'], "reward": r} for p, c, r in zip(prompts, completions, rewards.view(self.num_generations).tolist())],
+                    'trajectories': [{"messages": {"prompt": p[0], "response": c[0]} if len(p) == 1 else {"prompt": p[1]['text'], "response":c}, "solution": inputs[0]['solution'], "reward": r} for p, c, r in zip(prompts, completions, rewards.view(self.num_generations).tolist())],
                 }, f, indent=2)
         # x - x.detach() allows for preserving gradients from x
         per_token_loss = torch.exp(per_token_logps - per_token_logps.detach()) * advantages.unsqueeze(1)

@@ -1,5 +1,5 @@
-conda create -n TinyZero-V python=3.11 
-conda activate TinyZero-V
+conda create -n VisualThinker python=3.11 
+conda activate VisualThinker
 
 # Install the packages in open-r1-multimodal .
 cd src/open-r1-multimodal

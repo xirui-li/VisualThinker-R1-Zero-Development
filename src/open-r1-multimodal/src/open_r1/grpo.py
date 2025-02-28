@@ -93,11 +93,13 @@ def accuracy_reward(completions, solution, **kwargs):
                 content_match = re.search(r'<answer>(.*?)</answer>', content)
                 student_answer = content_match.group(1).strip() if content_match else content.strip()
                 
+                if student_answer == ground_truth:
+                    reward = 1.0
+
                 if extract_letters(student_answer)[-1] == ground_truth:
                     reward = 1.0
                 # Compare the extracted answers
-                if student_answer == ground_truth:
-                    reward = 1.0
+
             except Exception:
                 pass  # Keep reward as 0.0 if both methods fail
                 
