@@ -7,7 +7,7 @@
 *.jpg
 
 # dependency directories
-/Multimodal-R1/src/open-r1-multimodal/src/open_r1/__pycache__/*
+src/open-r1-multimodal/src/open_r1/__pycache__/
 
 # Python cache
 __pycache__/
@@ -16,4 +16,10 @@ __pycache__/
 *.egg-info/
 
 # wandb
-wandb/
+src/open-r1-multimodal/wandb/
+
+# folder
+src/open-r1-multimodal/trajactories/
+
+# outputs
+src/open-r1-multimodal/outputs/

@@ -498,7 +498,7 @@ class Qwen2VLGRPOTrainer(Trainer):
 
         log_trajectories = True
         if log_trajectories:
-            save_dir = f"trajectories_{self.args.run_name}/step{self.state.global_step}"
+            save_dir = f"trajectories/trajectories_{self.args.run_name}/step{self.state.global_step}"
             os.makedirs(save_dir, exist_ok=True)
             save_path = os.path.join(save_dir, f"rank{self.accelerator.process_index}.jsonl")
             with open(save_path, "w") as f:
