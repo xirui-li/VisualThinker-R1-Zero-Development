@@ -48,8 +48,8 @@ Maybe it's just higher than above the doorway, but slightly lower than above the
 ### Teams:
 [Hengguang Zhou](https://hengguangzhou.github.io/), [Xirui Li](https://xirui-li.github.io/), [Ruochen Wang](https://ruocwang.github.io/), [Minhao Cheng](https://cmhcbb.github.io/), [Tianyi Zhou](https://tianyizhou.github.io/) and [Cho-Jui Hsieh](https://web.cs.ucla.edu/~chohsieh/)
 
-
 <div align="center">
+<img src="https://multimodal-r1.s3.us-west-1.amazonaws.com/TurningPoint_transparent.png" width="700" alt="logo-figure_00">
 <img src="https://multimodal-r1.s3.us-west-1.amazonaws.com/logo.png" width="700" alt="logo-figure_00">
 </div>
 
