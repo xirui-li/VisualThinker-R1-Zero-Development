@@ -2,6 +2,10 @@
 
 # VisualThinker R1 Zero
 
+<div align="center">
+<img src="https://multimodal-r1.s3.us-west-1.amazonaws.com/TurningPoint_transparent.png" width="100" alt="logo-figure_00">
+</div>
+
 [![Notion](https://img.shields.io/badge/Notion-%23000000.svg?style=for-the-badge&logo=notion&logoColor=white)](https://turningpointai.notion.site/the-multimodal-aha-moment-on-2b-model)
 
 ![Reinforcement Learning](https://img.shields.io/badge/Algo-Reinforcement--Learning-red) 
@@ -47,11 +51,6 @@ Maybe it's just higher than above the doorway, but slightly lower than above the
 
 ### Teams:
 [Hengguang Zhou](https://hengguangzhou.github.io/), [Xirui Li](https://xirui-li.github.io/), [Ruochen Wang](https://ruocwang.github.io/), [Minhao Cheng](https://cmhcbb.github.io/), [Tianyi Zhou](https://tianyizhou.github.io/) and [Cho-Jui Hsieh](https://web.cs.ucla.edu/~chohsieh/)
-
-<div align="center">
-<img src="https://multimodal-r1.s3.us-west-1.amazonaws.com/TurningPoint_transparent.png" width="100" alt="logo-figure_00">
-</div>
-
 
 <div align="center">
 <img src="https://multimodal-r1.s3.us-west-1.amazonaws.com/logo.png" width="700" alt="logo-figure_00">
