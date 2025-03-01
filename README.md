@@ -46,7 +46,7 @@ Maybe it's just higher than above the doorway, but slightly lower than above the
 - 2025-02-26: We release the VisualThinker R1 Zero repo.
 
 <div align="center">
-<img src="https://us-west-1.console.aws.amazon.com/s3/object/multimodal-r1?region=us-west-1&bucketType=general&prefix=logo.png" width="700" alt="logo-figure_00">
+<img src="https://multimodal-r1.s3.us-west-1.amazonaws.com/logo.png" width="700" alt="logo-figure_00">
 </div>
 
 ## Setup
