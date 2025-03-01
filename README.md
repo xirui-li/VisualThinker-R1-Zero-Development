@@ -50,6 +50,10 @@ Maybe it's just higher than above the doorway, but slightly lower than above the
 
 <div align="center">
 <img src="https://multimodal-r1.s3.us-west-1.amazonaws.com/TurningPoint_transparent.png" width="300" alt="logo-figure_00">
+</div>
+
+
+<div align="center">
 <img src="https://multimodal-r1.s3.us-west-1.amazonaws.com/logo.png" width="700" alt="logo-figure_00">
 </div>
 
