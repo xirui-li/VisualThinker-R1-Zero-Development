@@ -45,6 +45,10 @@ Maybe it's just higher than above the doorway, but slightly lower than above the
 - 2025-02-26: We share our main findings in this [notion blog](https://turningpointai.notion.site/the-multimodal-aha-moment-on-2b-model).
 - 2025-02-26: We release the VisualThinker R1 Zero repo.
 
+### Teams:
+[Hengguang Zhou](https://hengguangzhou.github.io/), [Xirui Li](https://xirui-li.github.io/), [Ruochen Wang](https://ruocwang.github.io/), [Tianyi Zhou](https://tianyizhou.github.io/), [Minhao Cheng](https://cmhcbb.github.io/) and [Cho-Jui Hsieh](https://web.cs.ucla.edu/~chohsieh/)
+
+
 <div align="center">
 <img src="https://multimodal-r1.s3.us-west-1.amazonaws.com/logo.png" width="700" alt="logo-figure_00">
 </div>
