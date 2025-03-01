@@ -1,6 +1,6 @@
 <div align="center">
 
-# VisualThinker R1 Zero
+# R1-Zero's Aha Moment for Visual reasoning, on just a 2B Base model!
 
 <div align="center">
 <img src="https://multimodal-r1.s3.us-west-1.amazonaws.com/TurningPoint_transparent.png" width="100" alt="logo-figure_00">
