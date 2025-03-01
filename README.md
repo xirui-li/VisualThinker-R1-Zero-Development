@@ -46,7 +46,7 @@ Maybe it's just higher than above the doorway, but slightly lower than above the
 - 2025-02-26: We release the VisualThinker R1 Zero repo.
 
 ### Teams:
-[Hengguang Zhou](https://hengguangzhou.github.io/), [Xirui Li](https://xirui-li.github.io/), [Ruochen Wang](https://ruocwang.github.io/), [Tianyi Zhou](https://tianyizhou.github.io/), [Minhao Cheng](https://cmhcbb.github.io/) and [Cho-Jui Hsieh](https://web.cs.ucla.edu/~chohsieh/)
+[Hengguang Zhou](https://hengguangzhou.github.io/), [Xirui Li](https://xirui-li.github.io/), [Ruochen Wang](https://ruocwang.github.io/), [Minhao Cheng](https://cmhcbb.github.io/), [Tianyi Zhou](https://tianyizhou.github.io/) and [Cho-Jui Hsieh](https://web.cs.ucla.edu/~chohsieh/)
 
 
 <div align="center">
