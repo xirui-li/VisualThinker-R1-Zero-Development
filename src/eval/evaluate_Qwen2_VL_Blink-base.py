@@ -72,7 +72,7 @@ def load_images(messsages):
 
 if __name__ == "__main__":
 
-    task_list = ['Relative_Depth', 'Relative_Reflectance', 'Spatial_Relation']
+    task_list = ['Relative_Depth', 'Spatial_Relation']
 
     blink_bench = []
 

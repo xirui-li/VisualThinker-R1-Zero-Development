@@ -61,7 +61,7 @@ def extract_characters_regex(s, choices=['(A)', '(B)', '(C)', '(D)', '(E)', '(F)
 
 if __name__ == "__main__":
 
-    task_list = ['Relative_Depth', 'Relative_Reflectance', 'Spatial_Relation']
+    task_list = ['Relative_Depth', 'Spatial_Relation']
 
     blink_bench = []
 
